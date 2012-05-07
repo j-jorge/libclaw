@@ -1,0 +1,17 @@
+A = { a, b }
+I = { 1 }
+F = { 3 }
+E = { 1, 2, 3 }
+T = {
+1 -> { (2, a) }
+2 -> { (3, b) }
+3 -> { (2, a) }
+}
+
+ababababababa: not valid
+ababab: valid
+bababa: not valid
+bababab: not valid
+a: not valid
+b: not valid
+: not valid

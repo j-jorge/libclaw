@@ -1,0 +1,9 @@
+# this automaton recognizes strings composed of a succession of 'ab'
+# like 'ab' or 'ababab'...
+#
+
+E 1 2 a
+E 2 3 b
+E 3 2 a
+I 1
+F 3

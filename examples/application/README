@@ -1,0 +1,7 @@
+program_name: ex-application
+
+This example program shows how to use the claw::application and the
+claw::logger classes.
+
+There is other example programs that use the claw::application
+class and the command line arguments system.

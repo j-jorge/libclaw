@@ -1,0 +1,65 @@
+CLAW LIBRARY: INSTALLATION NOTES
+
+SUMMARY:
+ 1. INSTALL
+ 2. UNINSTALL
+ 3. OPTIONS
+
+
+-- 1. INSTALL --
+
+You need cmake to install this library and also Boost 1.42. Maybe libjpeg 6b and
+libpng 1.2.8 too.
+These two libraries are required by default but can be disabled (see the OPTIONS
+below).
+
+Be sure to NOT turn off the use of libjpeg or libpng if they are required by the
+program you compile libclaw for. If you have a doubt, I recommend to keep the
+default settings.
+
+If you want html documentation, be sure you have "doxygen" installed.
+
+Go in the libclaw-<version> directory.
+
+For the full installation, type :
+    cmake . -DOPTION1 -DOPTION2 ...
+    make
+    make install # as root
+
+See below to know what 'OPTION' can be.
+
+-- 2. UNINSTALL --
+
+To remove the files you've installed, just type
+    make uninstall # as root
+
+
+-- 3. OPTIONS --
+
+You can customize your installation with the following options.
+
+  CLAW_NO_JPEG={true|false}
+        Deactivate or activate jpeg support (default is false)
+
+  CLAW_NO_PNG={true|false}
+        Deactivate or activate png support (default is false)
+
+  CLAW_INSTALL_CMAKE_MODULES={true|false}
+        Activate or deactivate the installation of the CMake modules for Claw
+        (default is true)
+
+  CLAW_CMAKE_MODULES_INSTALL_PATH=<dir>
+        Allow you to select the directory in which the CMake modules of Claw
+        will be installed (useful if you define a special installation prefix).
+
+these are cmake options:
+
+  CMAKE_INSTALL_PREFIX=<dir>
+        Directory in which the files will be installed (default is /usr/local)
+
+  CMAKE_BUILD_TYPE={debug|release|profile}
+        Activate or deactivate code debugging/profiling
+
+where :
+  {a|b} means either 'a' or 'b'
+  <dir> is a path to a directory.

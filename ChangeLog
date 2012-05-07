@@ -1,0 +1,429 @@
+2011-07-24 Julien Jorge <julien.jorge@gamned.org>
+
+	* version 1.7.0
+
+	* claw
+	- A command line argument of pattern key=value can receive an
+	  empty string.
+
+	* claw::graphic
+	- Add a constructor to each pixel class to constructo the color
+	  from a string representing an hexadecimal color code.
+
+	* claw::math
+	- Add a method to rotate a point around an other one.
+	- Add a method to get the angle of the line made by two points
+	  relatively to the x-axis.
+	- Add comparison operators for claw::math::rectangle.
+
+	* claw::meta
+	- Add a method to multi_type_map to get the number of values in
+	  the map.
+	- Add a method to insert all the values of an other map into a
+	  map.
+	- Add some methods to erase values from a multi_type_map.
+	- Add a type list containing all C++ types.
+	- Add a metaprog class type_list_contains to check if a type list
+	  contains a given type.
+	- Add a visitor class to visit all the (key, value) pairs in a
+	  multi_type_map.
+
+	* claw::pattern
+	- factory is a singleton only if CLAW_FACTORY_IS_SINGLETON is
+	  defined.
+
+	* claw::tween
+	- New library containing classes for data interpolation in time,
+	  also known as inbetweening or tweeners.
+
+2010-10-24 Julien Jorge <julien.jorge@gamned.org>
+
+	* version 1.6.0
+
+	* claw::graphic:
+	  - Added support for reading GIF files.
+	  - Added a function to merge images.
+	  - Added the function image::fill() to fill a rectangle with a
+	    given colour.
+	  - rgba_pixel is a structure.
+
+	* claw::configuration_file:
+	  - The fields can now be modified.
+	  - Added an iterator type on the name of the fields.
+	  - Added an iterator type on the name of the sections.
+	  - Added a function to clear a section.
+	  - Added a function to check if a field exists.
+
+	* claw::meta:
+	  - Added some classes to ease the use of type lists.
+	  - Added a structure to split a type list in two lists according
+	    to given delimiter.
+	  - Split meta.hpp into several files.
+	  - multi_type_map can now be iterated for a given type.
+	  - multi_type_map now only work with type lists.
+	  - Added a class to check if a type is derived from an other type.
+
+	* claw::text:
+	  - Added the c_escape function to escape characters in strings,
+	    like in c-strings.
+
+	* claw::math:
+	  - Added the function box_2d::join() to join boxes.
+	  - Added a method in box_2d to check if the box is empty.
+
+	* General:
+	  - Better implementation of max_vector, a structure used to store
+	    a set of "maximum" items from a range. Items are compared
+	    according to a given criterion.
+	  - Added a function claw::replace() to replace a set of values by
+	    other values in a sequence.
+	  - Added a function claw::glob_match() to check if a sequence
+	    matches a given pattern, similar to the behaviour of the
+	    terminals.
+	  - Do not fail when reading in a never opened socked, just return
+	    eof().
+	  - Add missing operator it_index<>::operator->().
+	  - Use gettext to translate messages. Translations are available
+	    in French and Norwegian.
+	  - Added a real_number class to manipulate floating points number
+	    using an epsilon value for comparisons.
+
+	* Design patterns
+	  - The namespace has been renamed 'pattern'.
+	  - Added the factory design pattern.
+
+	* Log system:
+	  - Fix wrong return type of claw::log_system::operator<<().
+	  - Add a log stream 'log_stream_uniq' that does not output
+	    successively the same message.
+	  - Add a log stream 'log_stream_concise' that does not output a
+	    line that have been recently been output.
+
+
+2009-06-15 Julien Jorge <julien_jorge@yahoo.fr>
+
+	* version 1.5.4
+
+	* claw::graphic:
+	  - Better name for pixel classes. Added default colors.
+	  - Comparison operators for the pixels.
+
+	* claw::math:
+	  - Added methods for intersection, cast, size, edge-coordinate
+	    and inclusion in box_2d
+	  - Added methods to easily get and set the position of the edges
+	    and corners of a box_2d
+	  - Replaced vector_2d::get_orthonormal by two methods allowing to
+	    chose the direction
+
+	* claw::arguments_table:
+	  - By default, arguments table gives no allowed arguments.
+	  - Add support for multiples arguments with the same name.
+
+	* claw::memory:
+	  - Add comparison operators in smart_ptr.
+
+	* claw::logger:
+	  - std::endl can be used on claw::logger.
+
+	* claw::graph:
+	  - Allow to create graphs whose edges have no specified type.
+
+
+2008-07-05 Julien Jorge <julien_jorge@yahoo.fr>
+
+	* version 1.5.3
+
+	* A release with minor changes:
+	  - Fix compilation issues with g++ 4.3
+	  - Set the soname of the libraries
+	  - Fix some warnings of cmake and ld
+	  - Create html documentation at compilation time
+	  - The assertion macros call abort() instead of exit()
+	  - Split the implementation and the interface of the AVL
+	  - Added a private operator=() to the class non_copyable
+	
+
+2008-01-12 Julien Jorge <julien_jorge@yahoo.fr>
+
+	* version 1.5.2b
+
+	* claw::text:
+	  - Added a getline method that removes the tailing '\r'.
+
+2008-01-07 Julien Jorge <julien_jorge@yahoo.fr>
+
+	* version 1.5.1b
+
+	* general:
+	  - Port to x86_64.
+	  - Port to FreeBSD (and all *BSD), thanks to patches from David
+	    Le Brun.
+
+2008-01-01 Julien Jorge <julien_jorge@yahoo.fr>
+
+	* version 1.5.0b
+
+	* general:
+	  - Improved/updated the example programs.
+	  - Updated installation script for windows.
+	  - Improved windows port.
+	  - Lot of bug fixes.
+
+	* claw::first, claw::pair_first, claw::second, claw::pair_second:
+	  split the const/non-const methods into two separate classes.
+
+	* claw::graphic:
+	  - Added reading and writing support for xpm files
+	  - Added reading support for 8 bits per pixel targa files
+	  - Added reading and writing support for pcx files.
+	  - Allow to build zero-width or zero-height images.
+
+	* claw::math:
+	  - The claw::math::rectangle<T> class now work as expected in
+	    general. IT BREAKS THE COMPATIBILITY WITH PREVIOUS VERSIONS:
+	    The difference concerns mainly the right() and bottom()
+	    methods of the rectangle<T> class:
+	    
+	    (new) rectangle<T>::right() == (old) rectangle<T>::right() + 1
+
+	* claw::lzw_encoder, claw::lzw_decoder: Added those classes to
+	  help encoding/decoding data with the LZW algorithm.
+
+	* claw::istream_input_buffer: Renamed claw::buffered_istream. Now
+	  it detects the end of the stream. It can also be tested (bool)
+	  to check if there is more data.
+
+	* claw::buffered_ostream: New class that write in a stream using a
+	  buffer.
+
+	* claw::bit_istream, claw::bit_ostream: classes to help reading
+	  and writing custom bit length data into streams.
+
+	* claw::tree: a class to manage a tree of any degree.
+
+	* claw::wrapped_iterator: a class to iterate through transformed
+	  elements of a container.
+
+2007-03-14 Julien Jorge <julien_jorge@yahoo.fr>
+
+	* version 1.4.2b
+
+	* general:
+	  - rectified some mistakes in the FindCLAW.cmake CMake module.
+	  - added the CLAW_CMAKE_MODULES_INSTALL_PATH variable for the
+	    CMake scripts, so the user can choose where the abovementioned
+	    module will be installed.
+	  - fixed linking problems under Mandriva 2007
+
+	* claw::math: splitted the math.hpp file into several headers (one
+	  for each class).
+
+	* claw::text: added the split() method that splits a string in a
+	  sequence of tokens, given a separator.
+
+	* claw::graphic::pixel32:
+	  - added a constructor taking the components values as
+	    parameters.
+	  - added the disequality operator.
+
+	* claw::concept::singleton: new implementation guarantying that
+	  the instance is destroyed at the end of the execution (bug fix
+	  #1653689).
+
+	* claw::log_system, claw::logger: added support for managing
+	  several log streams.
+
+2007-01-13 Julien Jorge <julien_jorge@yahoo.fr>
+
+	* version 1.4.1b
+
+	* general:
+	  - updated the code so it works under Windows (tested with
+	    Windows XP and MinGW).
+	  - simplified the use of Claw with CMake.
+	
+	* claw::kmp: bug fix. #1632755
+
+	* claw::logger: added __declspec(dll{import,export}) decorations
+	  (needed by Windows).
+
+	* claw::system_info: added support for Window.
+
+2006-11-26 Julien Jorge <julien_jorge@yahoo.fr>
+
+	* version 1.4.0b
+
+	* general: translated some comments from english to french.
+
+2006-11-05 Julien Jorge <julien_jorge@yahoo.fr>
+
+	* claw::meta: Create the namespace. Some classes for meta-programming:
+	  - if_then_else<bool Cond, typename ThenPart, typename ElsePart>:
+	    conditional type declaration.
+	  - same_type<typename T, typename U>: test if two types are the
+	    same.
+	  - type_list<typename Head, typename Queue>: a list of types.
+	  - type_list_find<typename T, typename List>: check if a type is in
+	    a given type_list.
+	  - type_list_is_a_set<typename List>: test if a each type in a
+	    type_list is present only once.
+
+	* claw::memory::smart_ptr: smart pointers (automatically release the
+	  memory when it is not pointed) with references count.
+
+	* claw::multi_type_map: a kind of map that can support values of
+	  different types associated with the same key.
+
+2006-10-29 Julien Jorge <julien_jorge@yahoo.fr>
+
+        * claw::system_info: Created the class. Support unix systems only for
+	  the moment.
+
+2006-10-22 Julien Jorge <julien_jorge@yahoo.fr>
+
+	* claw::configuration_file: created the class.
+	
+	* claw::arguments_table: bug fix. The parameters of the long argument
+	  were not saved when calling the add() method.
+
+2006-10-18 Julien Jorge <julien_jorge@yahoo.fr>
+
+	* claw::arguments_table:
+	  - Added a method to check if required arguments are set.
+	  - Modified the help() method to print the required fields before
+	    optional ones.
+	  
+2006-10-16 Julien Jorge <julien_jorge@yahoo.fr>
+
+        * version 1.3.1b
+
+	* claw::net: Bug fix. Fixed bug #1578027. Sockets worked only on local
+	  host.
+	  
+2006-10-14 Julien Jorge <julien_jorge@yahoo.fr>
+
+	* version 1.3.0b
+
+	* claw::avl:
+	  - Added the assignment operator.
+	  - Added the insert() method taking a range of values.
+
+	* claw::math::rectangle:
+	  - Added the includes( rectangle ) method, to check if a
+	    rectangle is inside an other one.
+	  - Added the size() method, to get the size of the rectangle with
+	    one function call.
+	  - Small bug fix in claw::math::rectangle constructor with two
+	    claw::math::coordinate_2d.
+	
+	* claw::math::box_2d: Added a constructor from two
+	  math::coordinate_2d<> for the position and the size.
+
+	* claw::math::coordinate_2d: Added the unary minus operator.
+
+	* claw::math::vector_2d: Added a constructor with two coordinates
+	  (the head and the tail).
+	
+	* claw::math:point_2d: deprecated. Moved its "distance()" method
+	  in the math::coordinate_2d class.
+	
+	* claw::logger: bug fix. Buffer overflow risk in the write method.
+	
+	* claw::graphic::png: new class. Support of the PNG image format
+	  (read/write).
+
+	* claw::graphic::jpeg: Added writing support for JPEG images.
+	
+	* claw::graphic::image: Added a load( std::istream& ) method to
+	  load any type of supported format.
+	
+	* claw::graphic::targa: bug fix. The signature was incorrect
+	  (checking and writing). WARNING: All targa file wrote with
+	  previous versions aren't valid.
+
+	* general:
+	  - Replaced SCons with cmake.
+	  - Added a general example for the claw::graphic::image class and
+	    subclasses. Removed examples for bitmap and jpeg.
+	  - New script to get options and libraries needed when using
+	    Claw.
+
+2006-07-18 Julien Jorge <julien_jorge@yahoo.fr>
+
+	* version 1.2.1b
+	
+	* claw::graphic::targa: Bug fix. An invalid code was output when
+	  calling ::file_output_buffer::raw() and the /remaining/ variable
+	  was zero.
+
+2006-07-10 Julien Jorge <julien_jorge@yahoo.fr>
+
+	* version 1.2.0b
+	
+	* claw::unary_compose: new class. Function object that composes
+	  two function objects.
+	
+	* claw::delete_function: new class. Function object that deletes a
+	  pointer.
+	
+	* claw::pair_first, claw::pair_second: new classes. Equivalent to
+	  the *first* and *second* classes, but take std::pair as template
+	  arguments.
+	
+	* claw::clone: new class. Function object that clones a pointer.
+	
+	* claw::arguments_table: new class. A class to manage the
+	  arguments of your program, with automatic management of
+	  short/long arguments and help message.
+	
+	* claw::socket_traits: new class. Common interface for platform
+	  specific methods needed for using sockets. Now we can use
+          sockets under linux or windows.
+	
+	* claw::rle_encoder, claw::rle_decoder: new classes. Classes to
+	  help encoding/decoding RLE streams.
+	
+	* claw::graphic::color_palette: new class. A class that manage the
+	  color palette in palettized images.
+	
+	* claw::istream_input_buffer: new class. This class is made to
+	  help reading istreams with a buffer.
+	
+	* claw::graphic::jpeg: new class. An image class for jpeg file loading.
+
+	* claw::graphic::targa:
+	  - Added methods for saving (un)compressed targa files.
+	  - Added methods for reading RLE targas.
+	  - Modified so it can be read from std::istream (more generic
+	    than std::ifstream).
+	  - Bug fix. When reading non-32 bits targas, the transparency was
+	    incorrect.
+	
+	* claw::graphic::bitmap:
+	  - Added loading support for (un)compressed monochrome, 4 bpp and
+	    8 bpp bitmaps.
+	  - Modified so it can be read from std::istream (more generic
+	    than std::ifstream).
+	
+	* claw::graphic::image:
+	  - Changed allocation mode. Data is allocated each line at once,
+	  - Removed the pixels methods.
+	  - Added the iterator class.
+	
+	* claw::application: Use the new claw::arguments_table class
+	  instead of the claw::arguments class.
+	
+	* claw::graph: Translated the last french method names to english
+	  names.
+	
+	* claw::arguments: bug fix. The program name wasn't removed from
+	  the argument list.
+	
+	* claw::math::line_2d<>: bug fix.  Corrected mistakes in the
+	  intersection() method.
+	
+	* general:
+	  - Added an example program for the claw::graphic::jpeg class.
+	  - Added the string_algorithm package,
+	  - Added new asserts for pre/post conditions testing.

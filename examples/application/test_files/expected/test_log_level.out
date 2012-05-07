@@ -1,0 +1,25 @@
+Testing error_level:
+error: error_level:program_name == ./ex-application
+Testing warning_level:
+Testing verbose_level:
+'-b' argument is present.
+'--string' argument value is 'my string'
+Testing error_level:
+error: error_level:program_name == ./ex-application
+Testing warning_level:
+warning: warning_level:argument 0 == one
+warning: warning_level:argument 1 == two
+warning: warning_level:argument 2 == three
+Testing verbose_level:
+'-b' argument is present.
+'--string' argument value is 'my string'
+Testing error_level:
+error: error_level:program_name == ./ex-application
+Testing warning_level:
+warning: warning_level:argument 0 == one
+warning: warning_level:argument 1 == two
+warning: warning_level:argument 2 == three
+Testing verbose_level:
+verbose_level:m_app is running
+'-b' argument is present.
+'--string' argument value is 'my string'

@@ -1,0 +1,30 @@
+Tree is empty
+File loading...
+size : 11
+Min = 2
+Max = 88
+Tree's not empty
+Found : 2 17 22 28 31 37 57 62 76 78 88
+Scan with an iterator : 2 17 22 28 31 37 57 62 76 78 88
+Scan bis, iterator affectation :2: 2 17 22 28 31 37 57 62 76 78 88
+17: 17 22 28 31 37 57 62 76 78 88
+22: 22 28 31 37 57 62 76 78 88
+28: 28 31 37 57 62 76 78 88
+31: 31 37 57 62 76 78 88
+37: 37 57 62 76 78 88
+57: 57 62 76 78 88
+62: 62 76 78 88
+76: 76 78 88
+78: 78 88
+88: 88
+Deletions
+Copy and scan
+source size : 0
+copy size : 0
+Tree's copy is empty
+
+Reverse scan
+
+Assignment
+Clear
+Tree's is empty

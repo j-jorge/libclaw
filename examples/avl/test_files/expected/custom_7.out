@@ -1,0 +1,26 @@
+Tree is empty
+File loading...
+size : 7
+Min = 0
+Max = 6
+Tree's not empty
+Found : 0 1 2 3 4 5 6
+Scan with an iterator : 0 1 2 3 4 5 6
+Scan bis, iterator affectation :0: 0 1 2 3 4 5 6
+1: 1 2 3 4 5 6
+2: 2 3 4 5 6
+3: 3 4 5 6
+4: 4 5 6
+5: 5 6
+6: 6
+Deletions
+Copy and scan
+source size : 0
+copy size : 0
+Tree's copy is empty
+
+Reverse scan
+
+Assignment
+Clear
+Tree's is empty

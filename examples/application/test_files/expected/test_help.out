@@ -1,0 +1,30 @@
+./ex-application [-b] [-h] [--log-file=file] [--log-level=string] [--string=any_string] more_string...
+
+	-b	Sample boolean argument.
+	-h, --help	Print this help screen.
+	--log-file	The file to use to store log informations.
+	--log-level	Level of log informations:
+		error: error messages,
+		warning: warning and error messages,
+		verbose: all messages.
+	--string	Print a string.
+Testing error_level:
+Testing warning_level:
+Testing verbose_level:
+'-b' argument is missing.
+'--string' argument value is ''
+./ex-application [-b] [-h] [--log-file=file] [--log-level=string] [--string=any_string] more_string...
+
+	-b	Sample boolean argument.
+	-h, --help	Print this help screen.
+	--log-file	The file to use to store log informations.
+	--log-level	Level of log informations:
+		error: error messages,
+		warning: warning and error messages,
+		verbose: all messages.
+	--string	Print a string.
+Testing error_level:
+Testing warning_level:
+Testing verbose_level:
+'-b' argument is missing.
+'--string' argument value is ''

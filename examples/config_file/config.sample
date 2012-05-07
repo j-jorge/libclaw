@@ -1,0 +1,14 @@
+# comment
+
+field = value
+
+[section] # in line comment
+#more comments
+field1 = value \# 2 \
+  remaining string
+field = foo
+field = bar
+
+[section \# 2] # working ?
+field \#4 = some value \\\\\\\\# is this a comment ?
+

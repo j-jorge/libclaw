@@ -1,0 +1,43 @@
+# this is a test file for the example program of the
+# claw::multi_type_map class.
+
+# first, add some item in the map
+# syntax is:
+#
+#   set <key> <type> <value>
+#
+# where:
+# - key is an integer
+# - type is b, f, s or c for bool, float, string and custom,
+#   respectively
+# - value is a value of type <type>
+#
+# The value for the custom type is a pair of an interger and a string
+#
+set 0 b 0
+set 1 b 1
+set 0 f 3.14
+set 0 c 72 seventy-two
+set 1 s my_favorite_string
+set 1 c 24 my_favorite_number
+
+# then, print some values
+# syntax is:
+#
+#   get <key> <type>
+#
+# where:
+# - key is an integer
+# - type is b, f, s or c for bool, float, string and custom,
+#   respectively
+#
+get 0 b
+get 1 b
+get 5 b # does not exist
+get 0 f
+get 5 f # does not exist
+get 0 c
+get 5 c # does not exist
+get 1 s
+get 5 s # does not exist
+get 1 c

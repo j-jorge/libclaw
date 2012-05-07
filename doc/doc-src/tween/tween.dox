@@ -1,0 +1,683 @@
+/*! \page tweeners C++ Tweeners
+
+Tween is a C++ library providing an implementation for tweening. In
+details, this library allows to interpolate the intermediate values
+between two given values during a time interval. This practice is
+well used in animation and is widely popular in the context of
+ActionScript/Flash games and websites. The goal of this library is to
+provide similar functionalities to C++ programs.
+
+<!--
+  Table of content generated with:
+    grep '\\\(sub\)*section' tween.dox \
+      | cut -d' ' -f1-2 \
+      | sed 's:\\section: - \\ref:;s:\\subsection:  - \\ref:'
+-->
+ - \ref tweener-why
+ - \ref tweener-examples
+  - \ref tweener-example-var
+  - \ref tweener-example-group
+  - \ref tweener-example-callback
+ - \ref tweener-classes
+  - \ref tweener-tweener-contract
+  - \ref tweener-single_tweener
+  - \ref tweener-tweener_group
+  - \ref tweener-tweener_sequence
+ - \ref tweener-easing-functions
+  - \ref tweener-easing-contract
+  - \ref tweener-easing-symmetric
+  - \ref tweener-easing-predefined
+
+\section tweener-why Why this library
+
+Making a variable to vary from a original value to a final value
+following a predefined function is something recurrent in programming
+and especially during the development of games. As far as we know, the
+only free C++ library providing this functionality is <a
+href="http://code.google.com/p/cpptweener/">cpptweener</a>, a port of
+the <a href="http://code.google.com/p/tweener/">tweener</a>
+library. Unfortunately, even if cpptweener is an accurate port of the
+ActionScript tweener library, she lacks several functionalities.
+
+Our implementation is inspired from the aforementioned cpptweener and
+tweener libraries. Indeed, the same terminology will be used and the
+<a href="http://robertpenner.com/easing/">equations of Penners</a> are
+also implemented. claw::tween provides the following functionalities:
+
+ - Interpolation is done on the value of a given variable or using an
+   user-provided callback function,
+ - The interpolated values are computed using a predefined easing
+   function or any user-provided function respecting the contract,
+ - Several tweeners can easily be executed simultaneously or in a row,
+ - The library has a modern C++ design.
+
+\section tweener-examples Examples
+
+This section presents some simple programs to show the usage of the
+claw::tween library.
+
+\subsection tweener-example-var Interpolating the value of a variable
+
+The following C++ program changes the value of a given variable from
+its initial value to a target value using a linear interpolation of
+the values in-between.
+
+\code
+#include <iostream>
+#include <claw/tween/single_tweener.hpp>
+#include <claw/tween/easing/easing_linear.hpp>
+
+int main()
+{
+  double x(10);
+  claw::tween::single_tweener t(x, 15, 1, claw::tween::easing_linear::ease_in);
+
+  while ( !t.is_finished() )
+    {
+      t.update(0.1);
+      std::cout << x << std::endl;
+    }
+
+  return 0;
+}
+\endcode
+
+In the above function a variable \c x is created with an initial
+value. The tweener is then created:
+\code
+  claw::tween::single_tweener t(x, 10, 1, claw::tween::easing_linear::ease_in);
+\endcode
+
+Since there is only a single value to interpolate, a \c single_tweener is
+used. Let's observe the detail of the constructor's parameters:
+
+\code
+single_tweener( double& val, double end, double duration, easing_function e );
+\endcode
+
+The first parameter is the variable whose value is interpolated. The
+second parameter is the value that must be assigned to \a val at the
+end of the interpolation. Then the third parameter is the total
+duration of the interpolation. The unit can be whatever the user wants
+(seconds, milliseconds, …) as long as this is the same unit used for
+the updates. Finally, the fourth parameter is the function used to
+compute the intermediate values. See \ref tweener-easing for details
+about those functions.
+
+The next part of the example updates the tweeners until the end value
+is reached.
+
+\code
+  while ( !t.is_finished() )
+    {
+      t.update(0.1);
+      std::cout << x << std::endl;
+    }
+\endcode
+
+The parameter of the \c update function is the elapsed time since the
+last update. Here the loop does ten iterations and produces the
+following output:
+
+\verbatim
+10.5
+11
+11.5
+12
+12.5
+13
+13.5
+14
+14.5
+15
+\endverbatim
+
+\subsection tweener-example-group Interpolating the value of several variables
+
+The following C++ program changes the value of several variables from
+their initial values to a target value using a linear interpolation
+of the values in-between. Since we do not want to manage each tweener
+individually, we will use a \c tweener_group to manage them.
+
+\code
+#include <iostream>
+#include <claw/tween/single_tweener.hpp>
+#include <claw/tween/tweener_group.hpp>
+#include <claw/tween/easing/easing_quad.hpp>
+
+struct coord
+{
+  double x;
+  double y;
+};
+
+int main()
+{
+  coord c = { 0, 0 };
+  claw::tween::tweener_group t;
+  t.insert
+    ( claw::tween::single_tweener
+      ( c.x, 10, 1, claw::tween::easing_linear::ease_in ) );
+  t.insert
+    ( claw::tween::single_tweener
+      ( c.y, 10, 1, claw::tween::easing_linear::ease_in ) );
+
+  do
+    {
+      t.update(0.1);
+      std::cout << c.x << ' ' << c.y << std::endl;
+    }
+  while ( !t.is_finished() );
+
+  return 0;
+}
+\endcode
+
+Here there are several values to interpolate simultaneously. Instead
+of updating each tweener individually, they are inserted into a \c
+tweener_group that will manage them. One can notice that
+claw::tween::tweener_group is also a tweener, thus we insert groups
+inside groups.
+
+\subsection tweener-example-callback Interpolating values using callbacks
+
+In the previous example all the member variables of \c coord are
+public, thus they can be passed by reference to the constructor of \c
+single_tweener. Unfortunately in most real-life situations the member
+variables are not public and those values are modified using
+setters. In this situation, one can use the second constructor of \c
+single_tweener:
+
+\code
+single_tweener
+  ( double init, double end, double duration, update_function callback,
+    easing_function e );
+\endcode
+
+This constructor accept a callback function as the fourth
+parameter. This function, whose signature must be <tt>void
+(double)</tt>, is called at each update with the interpolated value as
+its only parameter.
+
+Here is a modification of the previous example where setters are used
+to update the values of the \c coord. The callback is created using
+<a
+href="http://www.boost.org/doc/libs/release/libs/bind">boost::bind</a>
+to create a function with the adequate signature.
+
+\code
+#include <iostream>
+#include <claw/tween/single_tweener.hpp>
+#include <claw/tween/tweener_group.hpp>
+#include <claw/tween/easing/easing_linear.hpp>
+#include <boost/bind.hpp>
+
+class coord
+{
+public:
+  double get_x() const { return m_x; }
+  void set_x( double x ) { m_x = x; }
+
+  double get_y() const { return m_y; }
+  void set_y( double y ) { m_y = y; }
+
+private:
+  double m_x;
+  double m_y;
+};
+
+int main()
+{
+  coord c;
+  claw::tween::tweener_group t;
+  t.insert
+    ( claw::tween::single_tweener
+      ( 0, 10, 1, boost::bind( &coord::set_x, &c, _1 ),
+        claw::tween::easing_linear::ease_in ) );
+  t.insert
+    ( claw::tween::single_tweener
+      ( 0, 10, 1, boost::bind( &coord::set_y, &c, _1 ),
+        claw::tween::easing_linear::ease_in ) );
+
+  do
+    {
+      t.update(0.1);
+      std::cout << c.get_x() << ' ' << c.get_y() << std::endl;
+    }
+  while ( !t.is_finished() );
+
+  return 0;
+}
+\endcode
+
+\section tweener-classes Tweener classes
+
+The library provides three tweener classes to manage tweeners, named
+\c single_tweener, \c tweener_group and \c tweener_sequence. Each one
+fills a particular need described in the following sections.
+
+\subsection tweener-tweener-contract The contract of the tweeners
+
+The tweener interface, as described below, is quite simple:
+
+\code
+class tweener
+{
+public:
+  tweener();
+  tweener( const tweener& that );
+
+  tweener& operator=( const tweener& that );
+
+  void swap( tweener& that ) throw();
+
+  bool is_finished() const;
+  double update( double dt );
+};
+\endcode
+
+The tweener library use two functions to manage the tweeners. First,
+the <tt>bool is_finished() const</tt> must return true if and only if
+the final values has been reached. Then,
+<tt>double update(double)</tt> is used to update the intermediate
+values, where the single argument is the amount of time since the last
+update or since the construction of the tweener. This function returns
+the amount of \a dt not used in the update. For example, if a tweener
+is at 1 time unit from the end of the interpolation and
+<tt>update(1.5)</tt> is called on this tweener, then 0.5 is
+returned. Indeed, only 1 of the 1.5 available units have been used to
+reach the end of the interpolation.
+
+\subsection tweener-single_tweener claw::tween::single_tweener
+
+The claw::tween::single_tweener object is the class to use to make one
+value to vary from a source value to a final value in a given amount
+of time and according to a given easing function. The interface is
+described below:
+
+\code
+class single_tweener
+{
+public:
+  typedef boost::function<void (double)> update_function;
+  typedef boost::function<double (double)> easing_function;
+
+public:
+  single_tweener();
+  single_tweener
+  ( double init, double end, double duration, update_function callback,
+    easing_function e );
+  single_tweener
+  ( double& val, double end, double duration, easing_function e );
+
+  void set_init( double v );
+  void set_end( double v );
+  void set_duration( double v );
+  void set_callback( update_function f );
+  void set_easing( easing_function f );
+
+  bool is_finished() const;
+  double update( double dt );
+};
+\endcode
+
+The default behavior of the single_tweener is to use a callback
+function to send the new value to the caller at each update. Let's
+have a look at the following constructor.
+
+\code
+single_tweener
+( double init, double end, double duration, update_function callback,
+  easing_function e );
+\endcode
+
+The two first arguments defined the value returned by the tweener
+respectively at the beginning and the end of the interpolation. The
+third parameter is the total duration of the interpolation. The unit
+can be whatever the user wants (seconds, milliseconds, …) as long as
+this is the same unit used for the updates. The fourth argument is the
+callback function called at each update. His signature must be
+<tt>void (double)</tt>, where the argument receive the current
+intermediate value. Finally, the fifth parameter is the function used
+to compute the intermediate values. See \ref tweener-easing for
+details about this topic.
+
+In the situation where the interpolation is done on a known variable,
+one would have to provide a callback function to assign the
+intermediate values to the variable. In order to ease the use of
+tweeners for this kind of situation, an other constructor is defined:
+
+\code
+single_tweener( double& val, double end, double duration, easing_function e );
+\endcode
+
+The difference with the aforementioned constructor is that there is no
+callback function to provide. Here, the first parameter is the
+variable whose value is interpolated. Its initial value is taken for
+the initial value of the interpolation. The created tweener will
+manage the assignment of the intermediate value to \a val.
+
+In other words, the following program:
+
+\code
+double v;
+
+void assign_v( double i )
+{
+  v = i;
+}
+
+single_tweener create_tweener()
+{
+  return single_tweener(0, 10, 1, &assign_v, easing_linear::ease_in);
+}
+\endcode
+
+is completely equivalent to this more concise program:
+
+\code
+double v(0);
+
+single_tweener create_tweener()
+{
+  return single_tweener(v, 10, 1, easing_linear::ease_in);
+}
+\endcode
+
+\subsection tweener-tweener_group claw::tween::tweener_group
+
+Once that single_tweener is understood, the other tweener classes are
+quite simple. The claw::tween::tweener_group class is a tweener class
+that executes several tweeners simultaneously. Its interface is
+defined as follows:
+
+\code
+class tweener_group:
+{
+public:
+  void insert( const tweener& t );
+
+  void clear();
+
+  bool is_finished() const;
+  double update( double dt );
+};
+\endcode
+
+The \c tweener_group class does not compute values by itself but
+forwards the call to <tt>update(double)</tt> to other tweeners, thus
+allowing to play several tweeners in parallel.
+
+The <tt>bool is_finished()</tt> function returns true when all the
+tweeners of the group are finished. Also, tweeners can be inserted in
+a \c tweener_group at any time.
+
+\subsection tweener-tweener_sequence claw::tween::tweener_sequence
+
+The claw::tween::tweener_sequence class is a tweener class that
+executes several tweeners in a row. Its interface is defined as
+follows:
+
+\code
+class tweener_sequence:
+{
+public:
+  void insert( const tweener& t );
+
+  void clear();
+
+  bool is_finished() const;
+  double update( double dt );
+};
+\endcode
+
+The \c tweener_sequence class does not compute values by itself but
+forwards the call to <tt>update(double)</tt> to the current active
+tweener, splitting the argument value among several tweeners if
+needed.
+
+The <tt>bool is_finished()</tt> function returns true when all the
+tweeners of the group are finished. Also, tweeners can be inserted in
+a \c tweener_sequence at any time.
+
+\section tweener-easing-functions Easing functions
+
+The easing functions define how the intermediate values are computed
+during the interpolation. For example, when tweening a value from 0 to
+1 during 1 second using a linear interpolation, the value at 0.5
+second must be 0.5. But when using a quadratic interpolation the value
+at this same date must be 0.25. The goal of an easing function is to
+compute those intermediate values according to a predefined curve.
+
+\subsection tweener-easing-contract The contract of the easing functions
+
+An easing function is a function whose signature is <tt>double
+(double)</tt> verifing the following contract:
+
+ - The argument is a number in (0,1) representing the ratio of the
+   total time for which we want the value.
+ - The return value is the amount of change at the time given by the
+   argument, relatively to the interval of the interpolated values,
+   without restriction on its range.
+
+The second criteria may need more explainations. For example, if the
+tweener's start value is \a v1 and its last value is \a v2. Then a
+return value of 0 means that the intermediate value set by the tweener
+must be \a v1, while a return value equal to 1 corresponds to an
+intermediate value equal to \a v2. In other words, a return value of
+\a x implies an intermediate value set by the tweener to
+<i>v1 + x × (v2 - v1)</i>.
+
+\subsection tweener-easing-symmetric claw::tween::symmetric_easing
+
+There are typically three ways to apply an easing effect: when
+reaching the final value (<i>ease-in</i>), when leaving the initial
+value (<i>ease-out</i>), or in both situations (<i>ease-in-out</i>).
+
+One can observe that the ease-out can be computed from the ease-in
+value, and ease-in-out can be computed from ease-in and ease-out. The
+goal of the claw::tween::symmetric_easing class is to define the
+ease-out and ease-in-out functions given the ease-out-function.
+
+This class is defined as:
+
+\code
+template<double (*Function)(double)>
+class symmetric_easing
+{
+public:
+  static double ease_in( double t );
+  static double ease_out( double t );
+  static double ease_in_out( double t );
+
+};
+\endcode
+
+Given a function <tt>double f(double)</tt> verifying the easing
+contract, then <tt>symmetric_easing<f></tt> provides the following
+implementations:
+
+ - <tt>symmetric_easing<f>::ease_in(t)</tt> returns <tt>f(t)</tt>,
+ - <tt>symmetric_easing<f>::ease_out(t)</tt>
+   returns <tt>1 - ease_in(1 - t)</tt>,
+ - <tt>symmetric_easing<f>::ease_in_out(t)</tt>
+   returns <tt>ease_in(2 * t) ÷ 2</tt> if \a t is less than 0.5,
+   <tt>0.5 + ease_out(2 * t - 1) ÷ 2</tt> otherwise.
+
+\subsection tweener-easing-predefined Predefined easing functions
+
+The following easing classes are implementations of the
+\c symmetric_easing class in the library.
+
+<!--
+for f in *.hpp
+do
+  CLASS=$(basename $f .hpp)
+  NAME=$(echo $CLASS | cut -d_ -f2)
+
+  echo "  <tr>"
+  echo '    <td>'
+  echo "      claw::tween::$CLASS"
+  echo ""
+  echo '      <i>f(t) = </i>'
+  echo '    </td>'
+  echo "    <td>\image html tween/$NAME-in.png</td>"
+  echo "    <td>\image html tween/$NAME-out.png</td>"
+  echo "    <td>\image html tween/$NAME-inout.png</td>"
+  echo "  </tr>"
+done
+-->
+
+<table>
+  <tr>
+    <th>Easing Class and Ease-In Equation</th>
+    <th>Ease-In</th>
+    <th>Ease-Out</th>
+    <th>Ease-In-Out</th>
+  </tr>
+  <tr>
+    <td>
+      claw::tween::easing_back
+
+      <i>f(t) = t² × (2.70158 × t − 1.70158)</i>
+    </td>
+    <td>\image html tween/back-in.png</td>
+    <td>\image html tween/back-out.png</td>
+    <td>\image html tween/back-inout.png</td>
+  </tr>
+  <tr>
+    <td>
+      claw::tween::easing_bounce
+
+      <table>
+        <tr>
+          <td style="border: none;"><i>f(t) =</i></td>
+          <td style="border-right:none; border-top:none; border-bottom:none;">
+            <i>1 − 7.5625 × (1-t)²</i> if <i>1 − t < 1 ÷ 2.75</i>
+
+            or <i>1 − (7.5625 × (1 − t − 1.5 ÷ 2.75)² + 0.75)</i>
+            if <i>1 − t < 2 ÷ 2.75</i>
+
+            or <i>1 − (7.5625 × (1 − t − 2.25 ÷ 2.75)² + 0.9375)</i>
+            if <i>1 − t < 2.5 ÷ 2.75</i>
+
+            <i>1 − (7.5625 × (1 − t − 2.625 / 2.75)² + 0.984375)</i>
+            otherwise
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td>\image html tween/bounce-in.png</td>
+    <td>\image html tween/bounce-out.png</td>
+    <td>\image html tween/bounce-inout.png</td>
+  </tr>
+  <tr>
+    <td>
+      claw::tween::easing_circ
+
+      <i>f(t) = 1 − √(1 − t²) </i>
+    </td>
+    <td>\image html tween/circ-in.png</td>
+    <td>\image html tween/circ-out.png</td>
+    <td>\image html tween/circ-inout.png</td>
+  </tr>
+  <tr>
+    <td>
+      claw::tween::easing_cubic
+
+      <i>f(t) = t³</i>
+    </td>
+    <td>\image html tween/cubic-in.png</td>
+    <td>\image html tween/cubic-out.png</td>
+    <td>\image html tween/cubic-inout.png</td>
+  </tr>
+  <tr>
+    <td>
+      claw::tween::easing_elastic
+
+      <i>f(t) = −2<sup>10 × (t − 1)</sup> × sin(((t − 1) − 0.3 ÷ 4) × 2 × π ÷ 4)</i>
+    </td>
+    <td>\image html tween/elastic-in.png</td>
+    <td>\image html tween/elastic-out.png</td>
+    <td>\image html tween/elastic-inout.png</td>
+  </tr>
+  <tr>
+    <td>
+      claw::tween::easing_expo
+
+      <table>
+        <tr>
+          <td style="border: none;"><i>f(t) =</i></td>
+          <td style="border-right:none; border-top:none; border-bottom:none;">
+            <i>0</i> if <i>t = 0</i>
+
+            <i>2<sup>10 × (t − 1)</sup></i>
+          </td>
+        </tr>
+      </table>
+    <td>\image html tween/expo-in.png</td>
+    <td>\image html tween/expo-out.png</td>
+    <td>\image html tween/expo-inout.png</td>
+  </tr>
+  <tr>
+    <td>
+      claw::tween::easing_linear
+
+      <i>f(t) = t</i>
+    </td>
+    <td>\image html tween/linear-in.png</td>
+    <td>\image html tween/linear-out.png</td>
+    <td>\image html tween/linear-inout.png</td>
+  </tr>
+  <tr>
+    <td>
+      claw::tween::easing_none
+
+      <i>f(t) = 0</i>
+    </td>
+    <td>\image html tween/none-in.png</td>
+    <td>\image html tween/none-out.png</td>
+    <td>\image html tween/none-inout.png</td>
+  </tr>
+  <tr>
+    <td>
+      claw::tween::easing_quad
+
+      <i>f(t) = t²</i>
+    </td>
+    <td>\image html tween/quad-in.png</td>
+    <td>\image html tween/quad-out.png</td>
+    <td>\image html tween/quad-inout.png</td>
+  </tr>
+  <tr>
+    <td>
+      claw::tween::easing_quart
+
+      <i>f(t) = t⁴</i>
+    </td>
+    <td>\image html tween/quart-in.png</td>
+    <td>\image html tween/quart-out.png</td>
+    <td>\image html tween/quart-inout.png</td>
+  </tr>
+  <tr>
+    <td>
+      claw::tween::easing_quint
+
+      <i>f(t) = t⁵</i>
+    </td>
+    <td>\image html tween/quint-in.png</td>
+    <td>\image html tween/quint-out.png</td>
+    <td>\image html tween/quint-inout.png</td>
+  </tr>
+  <tr>
+    <td>
+      claw::tween::easing_sine
+
+      <i>f(t) = 1 − cos(t × π ÷ 2)</i>
+    </td>
+    <td>\image html tween/sine-in.png</td>
+    <td>\image html tween/sine-out.png</td>
+    <td>\image html tween/sine-inout.png</td>
+  </tr>
+</table>
+*/

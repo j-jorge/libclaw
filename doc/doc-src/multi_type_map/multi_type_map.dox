@@ -1,0 +1,251 @@
+/*! \page multi_type_map Multi Type Map
+
+The multi type map is a map in which values of different types can be
+associated to the same key.
+
+ - \ref mtm-why
+ - \ref mtm-examples
+  - \ref mtm-examples-declaration
+  - \ref mtm-examples-visitor
+ - \ref mtm-classes
+  - \ref mtm-mtm
+  - \ref mtm-visitor
+
+\section mtm-why Why this class
+
+In its original form, the goal of the claw::multi_type_map was
+to provide a simple and elegant solution to associate values of
+several types to keys in a map. This is a quite recurrent problem in
+programming. Indeed, a quick search on the Internet will result on
+questions like in
+<a href="http://www.cplusplus.com/forum/general/14982/">this
+forum</a>,
+or
+<a
+href="http://ubuntuforums.org/archive/index.php/t-1485983.html">this
+other forum</a> or
+eventually
+<a
+href="http://mailman.linuxchix.org/pipermail/programming/2004-September/001484.html">this
+last one</a>.
+
+One solution for this problem would be to store the values in several
+maps, and deal with them according to the context. An other solution
+would be to use a single map and to impose to the values to inherit
+from a given class. Both solutions are tricky and painful.
+
+Hopefully, when using claw::multi_type_map you can obtain the same
+behavior without worrying. Plus, several functionalities are ready,
+such as exploring the whole set of pairs (key, value).
+
+\section mtm-examples Examples
+
+This section presents the creation and the exploration of a
+claw::multi_type_map.
+
+\subsection mtm-examples-declaration Declaring and using a multi_type_map
+
+The following program defines a \c multi_type_map where the values of
+type \c bool, \c float or \c std::string are associated to keys of type
+\c int.
+
+\code
+typedef claw::meta::type_list_maker<bool, float, std::string>::result my_type_list;
+typedef claw::multi_type_map<int, my_type_list> map_type;
+
+map_type example_map;
+\endcode
+
+The first statement defines the list of the types of the values stored
+in the map. This list must end with claw::meta::no_type. Here, the
+claw::meta::type_list_maker type from the \ref claw::meta
+"metaprogramming package" with manage this for us.
+
+Then you can insert values in the map:
+\code
+example_map.set<bool>( 0, false );
+example_map.set<bool>( 1, true );
+example_map.set<float>( 10, 3.14159 );
+example_map.set<float>( 30, 2.71828 );
+example_map.set<float>( 20, 1.61803 );
+example_map.set<std::string>( 100, "a string" );
+example_map.set<std::string>( 200, "an other string" );
+\endcode
+
+You can also get the value associated with a given key for a given
+type:
+\code
+std::cout << example_map.get<bool>(1) << std::endl;
+\endcode
+
+Or even iterate on the pairs defined for a given type:
+\code
+for ( map_type::iterator<float>::type it=example_map.begin<float>();
+      it!=example_map.end<float>(); ++it )
+  std::cout << it->first << '\t' << it->second << std::endl;
+\endcode
+
+\subsection mtm-examples-visitor Exploring the whole map
+
+Exploring the map for a given type is a convenient thing. An other
+convenient thing would be to iterate over the map for all the types at
+once. This is what the claw::multi_type_map_visitor is made for.
+
+First we have to define a function object that will receive the keys
+and the values. Our goal is to print the values in a stream, thus we
+define:
+
+\code
+struct map_printer
+{
+  std::ostream& m_stream;
+
+  map_printer( std::ostream& os )
+    : m_stream(os)
+  { }
+
+  template<typename T>
+  void operator()( int key, T value ) const
+  {
+    m_stream << "(" << key << ", " << value << ")" << std::endl;
+  }
+};
+\endcode
+
+Then, all we have to do is to pass an instance of this function object
+to a claw::multi_type_map_visitor:
+
+\code
+claw::multi_type_map_visitor visitor;
+visitor.run( example_map, map_printer(std::cout) );
+\endcode
+
+The following output is obtained from this program:
+
+\verbatim
+(0, 0)
+(1, 1)
+(10, 3.14159)
+(20, 1.61803)
+(30, 2.71828)
+(100, a string)
+(200, an other string)
+\endverbatim
+
+\section mtm-classes Classes related to the multi type map
+
+This section presents the interfaces of the structures related to the
+claw::multi_type_map.
+
+\subsection mtm-mtm The claw::multi_type_map class
+
+The claw::multi_type_map class is defined as follows. For the sake of
+clarity, the end of the recursion on the inheritance is not described
+here.
+
+Instantiations of the claw::multi_type_map type must meet the
+following type requirements:
+ - \a Key is comparable with operator<,
+ - \a TypeList is a type instantiation of claw::meta::type_list,
+   ending with claw::meta::no_type.
+
+\code
+template<typename Key, typename TypeList>
+class multi_type_map:
+  public multi_type_map<Key, typename TypeList::queue_type>
+{
+public:
+  typedef Key key_type;
+  typedef typename TypeList::head_type value_type;
+  typedef multi_type_map<Key, TypeList> self_type;
+  typedef multi_type_map<Key, typename TypeList::queue_type> super;
+
+  template<typename ValueType>
+  struct iterator
+  {
+    /** \brief The type of the iterator. */
+    typedef implementation_defined type;
+
+    /** \brief The type of the const_iterator. */
+    typedef
+    typename implementation_defined const_type;
+  };
+
+public:
+  template<typename ValueType>
+  void erase( typename iterator<ValueType>::type it );
+
+  template<typename ValueType>
+  std::size_t erase( const key_type& k );
+
+  template<typename ValueType>
+  const ValueType& get( const key_type& k ) const;
+
+  template<typename ValueType>
+  ValueType& get( const key_type& k );
+
+  template<typename ValueType>
+  void set( const key_type& k, const ValueType& v );
+
+  void set( const self_type& m );
+
+  template<typename ValueType>
+  bool exists( const key_type& k ) const;
+
+  std::size_t size() const;
+
+  template<typename ValueType>
+  typename iterator<ValueType>::type begin();
+
+  template<typename ValueType>
+  typename iterator<ValueType>::type end();
+
+  template<typename ValueType>
+  typename iterator<ValueType>::const_type begin() const;
+
+  template<typename ValueType>
+  typename iterator<ValueType>::const_type end() const;
+};
+\endcode
+
+\subsection mtm-visitor claw::multi_type_map_visitor to explore a map
+
+The claw::multi_type_map_visitor is defined as follows.
+
+\code
+class multi_type_map_visitor
+{
+public:
+  template<typename Key, typename TypeList, typename Function>
+  void run( multi_type_map<Key, TypeList>& m, Function f ) const;
+
+};
+\endcode
+
+The type passed for the \a Function type argument of the
+claw::multi_type_map_visitor::run method must be a function object
+with an operator() similar to the following, where <i>[text]</i> means
+that <i>text</i> is optional.
+
+<tt>
+template<typename T>
+<i>[any_return_type]</i> operator()
+(Key <i>[const [&]]</i>, T <i>[[const] &]</i>) <i>[const]</i>
+</tt>
+
+In other words:
+ - The function must be a template on the value of the second
+   parameter.
+ - The value returned by the call is ignored.
+ - The first parameter will receive the key of the visited element, as
+   a non modifiable value (whether a reference to a constant value or
+   a copy of the value of the key),
+ - The second parameter will receive the value of the visited
+   element. Declaring the argument as a reference to a non constant T
+   is allowed to modify the value in the map.
+
+Moreover, it is worth noting that any element can be inserted in
+the map during the visit and that removing the visited element from
+the map is allowed.
+
+*/

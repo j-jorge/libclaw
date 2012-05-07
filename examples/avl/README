@@ -1,0 +1,8 @@
+program_name: ex-avl
+
+This example program shows basic use of the claw::avl class. The program takes a
+file as argument. Some operations are then done to test the methods of the
+class.
+
+This program is a draft. It should be re-written to be sure that all methods of
+the class are tested.

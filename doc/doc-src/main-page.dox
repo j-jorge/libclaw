@@ -1,0 +1,48 @@
+/*! \mainpage
+
+Claw is a generalist library written in C++ and providing structures
+and algorithms, like containers, string algorithms, \ref tweeners
+"tweeners" and more.
+
+ - \ref main-presentation
+ - \ref main-download
+ - \ref main-licence
+ - \ref main-contact
+
+\section main-presentation Presentation
+
+The story of Claw begins when I wanted to group all the small tools
+I have made along my studies at the university. The library progress
+from time to time, mostly when I need a new tool for
+<a href="http://plee-the-bear.sf.net/">Plee the Bear</a>, a game I am
+actively working on.
+
+Claw wants to be standard compliant and as portable as possible. Of
+course, because I'm currently the only developer, the task is a little
+bit difficult and you could have some minor problems. If you
+experience any problem, please let me know by \ref main-contact
+"contacting me".
+
+Claw stands for "C++ Library Absolutely Wonderful".
+
+\section main-download Download
+
+Please check the <a
+href="http://sourceforge.net/projects/libclaw/files/">SourceForge.net
+project's page</a> to download the library.
+
+\section main-licence Licence
+
+Claw is licensed under the GNU Lesser General Public License (LGPL),
+version 2.1. Among other things, the license provides you a full
+access to the source code and allows you to use the library even if
+your program is not free. A copy of the license is included in the
+package. You can also access to its complete version through <a
+href="http://www.gnu.org/copyleft/lesser.html">this link</a>.
+
+\section main-contact Contact
+
+This library is developed by Julien Jorge. You can contact me at
+julien.jorge@gamned.org for any comment, question or request.
+
+*/

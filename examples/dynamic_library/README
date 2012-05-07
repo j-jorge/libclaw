@@ -1,0 +1,6 @@
+program_name: ex-dynamic_library
+
+This example program shows basic use of the claw::dynamic_library class. The 
+program takes some strings as arguments. The symbol corresponding to the first
+one is searched in the current program, the others are searched in the
+libfunc.so libary.

@@ -1,0 +1,6 @@
+program_name: ex-automaton
+
+This example program shows how to use the claw::automaton class. The program
+takes a file and some strings as arguments. An automaton is build from the
+description in the file, then we test for each string if it is recognized by
+the automaton.

@@ -1,0 +1,29 @@
+Tree is empty
+File loading...
+size : 10
+Min = 0
+Max = 86
+Tree's not empty
+Found : 0 8 24 33 38 48 73 79 82 86
+Scan with an iterator : 0 8 24 33 38 48 73 79 82 86
+Scan bis, iterator affectation :0: 0 8 24 33 38 48 73 79 82 86
+8: 8 24 33 38 48 73 79 82 86
+24: 24 33 38 48 73 79 82 86
+33: 33 38 48 73 79 82 86
+38: 38 48 73 79 82 86
+48: 48 73 79 82 86
+73: 73 79 82 86
+79: 79 82 86
+82: 82 86
+86: 86
+Deletions
+Copy and scan
+source size : 0
+copy size : 0
+Tree's copy is empty
+
+Reverse scan
+
+Assignment
+Clear
+Tree's is empty

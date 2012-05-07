@@ -1,0 +1,5 @@
+error: error_level:program_name == ./ex-application
+warning: warning_level:argument 0 == one
+warning: warning_level:argument 1 == two
+warning: warning_level:argument 2 == three
+verbose_level:m_app is running
