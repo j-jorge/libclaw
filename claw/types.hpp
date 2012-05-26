@@ -85,6 +85,8 @@ namespace claw
     typedef typename TypeList::queue_type queue_type;
 
   public:
+    /** \brief If the size of head_type matches the desired one, then the result
+        is head_type, otherwise we search the type in the remaining ones . */
     typedef
     typename meta::if_then_else
     < sizeof(head_type) * 8 == Size, head_type,
@@ -110,7 +112,9 @@ namespace claw
   template<std::size_t Size>
   struct integer_of_size
   {
+    /** \brief The integer type that matches the given size. */
     typedef typename find_type_by_size<Size, signed_integers>::type type;
+
   }; // struct integer_of_size
 
   /**
@@ -122,15 +126,27 @@ namespace claw
   template<std::size_t Size>
   struct unsigned_integer_of_size
   {
+    /** \brief The integer type that matches the given size. */
     typedef typename find_type_by_size<Size, unsigned_integers>::type type;
+
   }; // struct unsigned_integer_of_size
 
+  /** \brief An unsigned integer on 8 bits. */
   typedef unsigned_integer_of_size<8>::type u_int_8;
+
+  /** \brief An unsigned integer on 16 bits. */
   typedef unsigned_integer_of_size<16>::type u_int_16;
+
+  /** \brief An unsigned integer on 32 bits. */
   typedef unsigned_integer_of_size<32>::type u_int_32;
 
+  /** \brief An integer on 8 bits. */
   typedef integer_of_size<8>::type int_8;
+
+  /** \brief An integer on 16 bits. */
   typedef integer_of_size<16>::type int_16;
+
+  /** \brief An integer on 32 bits. */
   typedef integer_of_size<32>::type int_32;
 
 } // namespace claw

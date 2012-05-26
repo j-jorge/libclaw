@@ -117,7 +117,10 @@ namespace claw
             bool up_down_oriented() const ;
             bool left_right_oriented() const ;
             unsigned char alpha() const;
-          } image_specification;
+          }; // struct specification
+
+          /** \brief The specification of the image. */
+          specification image_specification;
         }; // struct header
 
         /*--------------------------------------------------------------------*/
@@ -422,6 +425,7 @@ namespace claw
           /** \brief The type of the pixels in the input buffer. */
           typedef Pixel pixel_type;
 
+          /** \brief The type of the patterns to encode. */
           typedef pixel_type pattern_type;
 
         public:
@@ -434,6 +438,11 @@ namespace claw
           unsigned int min_interesting() const;
           unsigned int max_encodable() const;
 
+          /**
+           * \brief Write a pixel in the stream and set its value in the good
+           *        order.
+           * \param p The pixel to write.
+           */
           void order_pixel_bytes( const pixel_type& p );
 
         private:

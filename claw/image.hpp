@@ -49,6 +49,7 @@ namespace claw
     class image
     {
     public:
+      /** \brief The type representing the colors of the pixels in the image. */
       typedef rgba_pixel pixel_type;
 
       /**
@@ -116,11 +117,21 @@ namespace claw
         typedef base_iterator<image_type, pixel_type> self_type;
 
       public:
+        /** \brief The type of the values accessed by the iterator. */
         typedef pixel_type value_type;
+
+        /** \brief The type of the references to the values accesssed by the
+            iterator. */
         typedef pixel_type& reference;
+
+        /** \brief The type of the pointers to the values accesssed by the
+            iterator. */
         typedef pixel_type* pointer;
+
+        /** \brief The type of the distance between two iterators. */
         typedef ptrdiff_t difference_type;
 
+        /** \brief The type of this category. */
         typedef std::random_access_iterator_tag iterator_category;
 
       public:
@@ -141,6 +152,12 @@ namespace claw
         inline self_type operator+( int n ) const;
         inline self_type operator-( int n ) const;
 
+        /**
+         * \brief Get an iterator at a specific distance of the current
+         *        iterator.
+         * \param n The distance of the wanted iterator.
+         * \param self The reference iterator.
+         */
         template<typename ImageT, typename PixelT>
         friend inline self_type operator+( int n, const self_type& self );
 
@@ -169,7 +186,20 @@ namespace claw
       }; // class base_iterator
 
     public:
+      /**
+       * \brief The type of the iterator on the pixels of the image.
+       *
+       * The pixels are accessed from the top line to the bottom line, and from
+       * the left to the right.
+       */
       typedef base_iterator<image, pixel_type> iterator;
+
+      /**
+       * \brief The type of the iterator to access constant pixels.
+       *
+       * The pixels are accessed from the top line to the bottom line, and from
+       * the left to the right.
+       */
       typedef base_iterator<const image, const pixel_type> const_iterator;
 
     public:

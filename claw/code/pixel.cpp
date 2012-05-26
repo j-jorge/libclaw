@@ -40,6 +40,9 @@ namespace claw
 {
   namespace graphic
   {
+    /** \ingroup Colors.
+     *  \{
+     */
     rgba_pixel transparent_pixel( 0, 0, 0, 0 );
 
     rgba_pixel black_pixel
@@ -72,6 +75,8 @@ namespace claw
     ( 0, std::numeric_limits<rgba_pixel::component_type>::max(),
       std::numeric_limits<rgba_pixel::component_type>::max(),
       std::numeric_limits<rgba_pixel::component_type>::max() );
+
+    /** \} */
 
   } // namespace graphic
 } // namespace claw

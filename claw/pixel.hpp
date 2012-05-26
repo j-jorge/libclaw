@@ -43,6 +43,7 @@ namespace claw
      */
     struct rgb_pixel
     {
+      /** \brief The type of the components of the color. */
       typedef unsigned char component_type;
 
       /** \brief Component by component representation. */
@@ -77,6 +78,7 @@ namespace claw
      */
     struct rgba_pixel
     {
+      /** \brief The type of the components of the color. */
       typedef unsigned char component_type;
 
       union
@@ -117,21 +119,44 @@ namespace claw
 
     }; // struct rgba_pixel
 
+    /** \brief A color with 8 bits per component. */
     typedef rgb_pixel rgb_pixel_8;
+
+    /** \brief A color with 8 bits per component and an alpha channel. */
     typedef rgba_pixel rgba_pixel_8;
 
+    /** \defgroup Colors Colors.
+     * \{
+     */
+
+    /** \brief A transparent color. */
     extern rgba_pixel transparent_pixel;
 
+    /** \brief The black color. */
     extern rgba_pixel black_pixel;
+
+    /** \brief The white color. */
     extern rgba_pixel white_pixel;
 
+    /** \brief The blue color. */
     extern rgba_pixel blue_pixel;
+
+    /** \brief The green color. */
     extern rgba_pixel green_pixel;
+
+    /** \brief The red color. */
     extern rgba_pixel red_pixel;
 
+    /** \brief The yellow color. */
     extern rgba_pixel yellow_pixel;
+
+    /** \brief The magenta color. */
     extern rgba_pixel magenta_pixel;
+
+    /** \brief The cyan color. */
     extern rgba_pixel cyan_pixel;
+
+    /** \} */
 
   } // namespace graphic
 } // namespace claw

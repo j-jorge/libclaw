@@ -43,9 +43,10 @@ namespace claw
     /*------------------------------------------------------------------------*/
     /**
      * \brief Write a pixel in the stream and set its value in the good order.
+     * \param p The pixel to write.
      *
      * \remark This method is specialized for the pixels of type
-     *         claw::graphic::pixel32.
+     *         claw::graphic::rgba_pixel_32.
      */
     template< >
     void targa::writer::file_output_buffer<claw::graphic::rgba_pixel_8>::

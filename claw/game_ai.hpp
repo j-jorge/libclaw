@@ -139,8 +139,13 @@ namespace claw
       class min_max
       {
       public:
+        /** \brief The type of a state in the game. */
         typedef State state;
+
+        /** \brief The type of the actions that change the state of the game. */
         typedef typename State::action action;
+
+        /** \brief The type used to represent the score. */
         typedef typename State::score score;
 
         score operator()
@@ -162,12 +167,18 @@ namespace claw
       class alpha_beta
       {
       public:
+        /** \brief The type of a state in the game. */
         typedef State state;
+
+        /** \brief The type of the actions that change the state of the game. */
         typedef typename State::action action;
+
+        /** \brief The type used to represent the score. */
         typedef typename State::score score;
 
         score operator()
 	( int depth, const state& current_state, bool computer_turn ) const;
+
       private:
         score compute
 	( int depth, const state& current_state, bool computer_turn,
@@ -188,8 +199,13 @@ namespace claw
       class select_action
       {
       public:
+        /** \brief The type of a state in the game. */
         typedef typename Method::state state;
+
+        /** \brief The type of the actions that change the state of the game. */
         typedef typename Method::action action;
+
+        /** \brief The type used to represent the score. */
         typedef typename Method::score score;
 
         void operator()
@@ -211,8 +227,13 @@ namespace claw
       class select_random_action
       {
       public:
+        /** \brief The type of a state in the game. */
         typedef typename Method::state state;
+
+        /** \brief The type of the actions that change the state of the game. */
         typedef typename Method::action action;
+
+        /** \brief The type used to represent the score. */
         typedef typename Method::score score;
 
         void operator()( int depth, const state& current_state,

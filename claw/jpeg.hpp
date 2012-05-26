@@ -63,7 +63,7 @@ namespace claw
         /** \brief "public" fields, needed by the jpeg library. */
         struct jpeg_error_mgr pub;
 
-        /* \brief For return to caller */
+        /** \brief For return to caller */
         jmp_buf setjmp_buffer;
 
         /** \brief A comprehensive description of the error. */
