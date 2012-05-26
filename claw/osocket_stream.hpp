@@ -45,15 +45,26 @@ namespace claw
     class basic_osocket_stream : public std::basic_ostream<CharT, Traits>
     {
     public:
+      /** \brief The type of the characters in the stream. */
       typedef CharT                          char_type;
+
+      /** \brief The traits carry some informations about the char_type. */
       typedef Traits                         traits_type;
+
+      /** \brief The type used to represent integers. */
       typedef typename traits_type::int_type int_type;
+
+      /** \brief The type used to represent a position in the stream. */
       typedef typename traits_type::pos_type pos_type;
+
+      /** \brief The type used to represent a delta in the positions. */
       typedef typename traits_type::off_type off_type;
 
+      /** \brief The type of the buffer manipulated by this stream. */
       typedef basic_socketbuf<char_type, traits_type> buffer_type;
 
     private:
+      /** \brief The type of the parent class. */
       typedef std::basic_ostream<CharT, Traits> super;
 
     public:
@@ -76,7 +87,11 @@ namespace claw
 
     }; // class basic_osocket_stream
 
+    /** \brief Implementation of the basic_osocket_stream for the char type. */
     typedef basic_osocket_stream<char> osocket_stream;
+
+    /** \brief Implementation of the basic_osocket_stream for the wide
+        characters. */
     typedef basic_osocket_stream<wchar_t> wosocket_stream;
 
   } // namespace net

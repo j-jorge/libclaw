@@ -119,6 +119,7 @@ namespace claw
     template<typename T1>
     struct type_list_maker_1
     {
+      /** \brief The list described by this implementation. */
       typedef type_list<T1, no_type> result;
     }; // struct type_list_maker_1
 
@@ -129,6 +130,7 @@ namespace claw
     template<typename T1, typename T2>
     struct type_list_maker_2
     {
+      /** \brief The list described by this implementation. */
       typedef type_list< T1, typename type_list_maker_1<T2>::result > result;
     }; // struct type_list_maker_2
 
@@ -139,6 +141,7 @@ namespace claw
     template<typename T1, typename T2, typename T3>
     struct type_list_maker_3
     {
+      /** \brief The list described by this implementation. */
       typedef
       type_list< T1, typename type_list_maker_2<T2, T3>::result > result;
     }; // struct type_list_maker_3
@@ -150,6 +153,7 @@ namespace claw
     template<typename T1, typename T2, typename T3, typename T4>
     struct type_list_maker_4
     {
+      /** \brief The list described by this implementation. */
       typedef
       type_list< T1, typename type_list_maker_3<T2, T3, T4>::result > result;
     }; // struct type_list_maker_4
@@ -161,6 +165,7 @@ namespace claw
     template<typename T1, typename T2, typename T3, typename T4, typename T5>
     struct type_list_maker_5
     {
+      /** \brief The list described by this implementation. */
       typedef type_list
       < T1,
         typename type_list_maker_4<T2, T3, T4, T5>::result > result;
@@ -174,6 +179,7 @@ namespace claw
              typename T6>
     struct type_list_maker_6
     {
+      /** \brief The list described by this implementation. */
       typedef type_list
       < T1,
         typename type_list_maker_5<T2, T3, T4, T5, T6>::result > result;
@@ -187,6 +193,7 @@ namespace claw
              typename T6, typename T7>
     struct type_list_maker_7
     {
+      /** \brief The list described by this implementation. */
       typedef type_list
       < T1,
         typename type_list_maker_6<T2, T3, T4, T5, T6, T7>::result > result;
@@ -200,6 +207,7 @@ namespace claw
              typename T6, typename T7, typename T8>
     struct type_list_maker_8
     {
+      /** \brief The list described by this implementation. */
       typedef type_list
       < T1,
         typename type_list_maker_7<T2, T3, T4, T5, T6, T7, T8>::result > result;
@@ -213,6 +221,7 @@ namespace claw
              typename T6, typename T7, typename T8, typename T9>
     struct type_list_maker_9
     {
+      /** \brief The list described by this implementation. */
       typedef type_list
       < T1,
         typename type_list_maker_8
@@ -228,6 +237,7 @@ namespace claw
              typename T6, typename T7, typename T8, typename T9, typename T10>
     struct type_list_maker_10
     {
+      /** \brief The list described by this implementation. */
       typedef type_list
       < T1,
         typename type_list_maker_9
@@ -244,6 +254,7 @@ namespace claw
 	     typename T11>
     struct type_list_maker_11
     {
+      /** \brief The list described by this implementation. */
       typedef type_list
       < T1,
         typename type_list_maker_10
@@ -260,6 +271,7 @@ namespace claw
 	     typename T11, typename T12>
     struct type_list_maker_12
     {
+      /** \brief The list described by this implementation. */
       typedef type_list
       < T1,
         typename type_list_maker_11
@@ -276,6 +288,7 @@ namespace claw
 	     typename T11, typename T12, typename T13>
     struct type_list_maker_13
     {
+      /** \brief The list described by this implementation. */
       typedef type_list
       < T1,
         typename type_list_maker_12
@@ -292,6 +305,7 @@ namespace claw
 	     typename T11, typename T12, typename T13, typename T14>
     struct type_list_maker_14
     {
+      /** \brief The list described by this implementation. */
       typedef type_list
       < T1,
         typename type_list_maker_13
@@ -309,6 +323,7 @@ namespace claw
 	     typename T15>
     struct type_list_maker_15
     {
+      /** \brief The list described by this implementation. */
       typedef type_list
       < T1,
         typename type_list_maker_14
@@ -330,6 +345,7 @@ namespace claw
 	      typename T14 = no_type, typename T15 = no_type >
     struct type_list_maker
     {
+      /** \brief The list described by this implementation. */
       typedef typename split_type_list_at
       < no_type,
         typename type_list_maker_15
@@ -461,7 +477,9 @@ namespace claw
       signed short, unsigned short,
       signed int, unsigned int,
       signed long, unsigned long,
+#ifndef __STRICT_ANSI__
       signed long long, unsigned long long,
+#endif
       float,
       double,
       long double,

@@ -49,12 +49,22 @@ namespace claw
                             public std::basic_streambuf<CharT, Traits>
     {
     public:
+      /** \brief The type of the characters in the stream. */
       typedef CharT                          char_type;
+
+      /** \brief The traits carry some informations about the char_type. */
       typedef Traits                         traits_type;
+
+      /** \brief The type used to represent integers. */
       typedef typename traits_type::int_type int_type;
+
+      /** \brief The type used to represent a position in the stream. */
       typedef typename traits_type::pos_type pos_type;
+
+      /** \brief The type used to represent a delta in the positions. */
       typedef typename traits_type::off_type off_type;
 
+      /** \brief The type of this implementation. */
       typedef basic_socketbuf<char_type, traits_type> self_type;
 
     public:

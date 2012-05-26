@@ -37,8 +37,8 @@
 
 /*----------------------------------------------------------------------------*/
 /**
- * \brief A portable version of std::getline( is, str, '\n' ) that removes a
- *        tailing '\r'.
+ * \brief A portable version of std::getline( is, str, '\\n' ) that removes a
+ *        tailing '\\r'.
  * \param is The stream in which we read.
  * \param str The line read from the stream.
  */
