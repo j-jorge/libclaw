@@ -45,12 +45,21 @@ namespace claw
       public avl<K, Comp>
     {
     private:
+      /** \brief The type of the parent class. */
       typedef avl<K, Comp> super;
 
     public:
+      /** \brief The type of the iterator used to access non modifiable
+          values. */
       typedef typename super::const_iterator const_iterator;
+
+      /** \brief The type of the values in the set. */
       typedef typename super::value_type value_type;
+
+      /** \brief The type passed to the template. */
       typedef typename super::referent_type referent_type;
+
+      /** \brief The type of a const reference on the values. */
       typedef typename super::const_reference const_reference;
 
     public:

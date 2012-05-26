@@ -47,21 +47,32 @@ namespace claw
      * \author Julien Jorge
      */
     template<bool Cond, typename ThenPart, typename ElsePart>
-    struct if_then_else
-    {
+    struct if_then_else;
 
-    }; // struct if_then_else
-
+    /**
+     * \brief Specialization for the case where the condition evaluates to
+     *        true.
+     */
     template<typename ThenPart, typename ElsePart>
     struct if_then_else<true, ThenPart, ElsePart>
     {
+      /** \brief When the condition evaluates to true, the result is the "else"
+          part. */
       typedef ThenPart result;
+
     }; // struct if_then_else [true]
 
+    /**
+     * \brief Specialization for the case where the condition evaluates to
+     *        false.
+     */
     template<typename ThenPart, typename ElsePart>
     struct if_then_else<false, ThenPart, ElsePart>
     {
+      /** \brief When the condition evaluates to false, the result is the "else"
+          part. */
       typedef ElsePart result;
+
     }; // struct if_then_else [false]
 
   } // namespace meta

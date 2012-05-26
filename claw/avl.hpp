@@ -43,14 +43,26 @@ namespace claw
   class avl
   {
   private:
+    /** \brief The type of the implementation of this tree. */
     typedef avl_base<K, Comp> impl_type;
 
   public:
+    /** \brief The type of the values in the tree. */
     typedef K value_type;
+
+    /** \brief The type of the keys in the tree. */
     typedef K key_type;
+
+    /** \brief The type passed to the template. */
     typedef K referent_type;
+
+    /** \brief The comparator to use to compare the keys. */
     typedef Comp key_less;
+
+    /** \brief The type of a const reference on the values. */
     typedef const K& const_reference;
+
+    /** \brief The type of the iterator on the values of the tree. */
     typedef typename impl_type::avl_const_iterator const_iterator;
 
   public:

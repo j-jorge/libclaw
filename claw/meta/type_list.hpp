@@ -58,8 +58,12 @@ namespace claw
     template<typename Head, typename Queue>
     struct type_list
     {
+      /** \brief The first type in the list. */
       typedef Head head_type;
+
+      /** \brief The remaining types in the list. */
       typedef Queue queue_type;
+
     }; // struct type_list
 
     /**
@@ -77,7 +81,10 @@ namespace claw
     template<typename Delimiter>
     struct split_type_list_at<Delimiter, no_type>
     {
+      /** \brief There is no left part if there is no list. */
       typedef no_type left_part_type;
+
+      /** \brief There is no right part if there is no list. */
       typedef no_type right_part_type;
 
     }; // struct split_type_list_at
