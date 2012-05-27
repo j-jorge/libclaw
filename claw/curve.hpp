@@ -126,6 +126,9 @@ namespace claw
         value_type evaluate
         ( double t, value_type origin, value_type output_direction,
           value_type input_direction, value_type end ) const;
+        value_type evaluate_derived
+        ( double t, value_type origin, value_type output_direction,
+          value_type input_direction, value_type end ) const;
 
       private:
         /** \brief The point at the beginning of the section. */
@@ -154,7 +157,6 @@ namespace claw
       void insert( const iterator& pos, const control_point& p );
 
       section get_section( const const_iterator& pos ) const;
-      value_type get_tangent_at( double t ) const;
       std::vector<value_type> get_y_at( value_type x ) const;
 
       iterator begin();

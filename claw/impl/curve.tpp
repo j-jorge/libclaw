@@ -125,7 +125,22 @@ template<typename C, typename Traits>
 claw::math::curve<C, Traits>::section::value_type
 claw::math::curve<C, Traits>::section::get_tangent_at( double t ) const
 {
-  return 0;
+  const value_type dx = evaluate_derived
+    ( t, traits::get_x(m_origin->get_position()),
+      traits::get_x(m_origin->get_output_direction()),
+      traits::get_x(m_end->get_input_direction()),
+      traits::get_x(m_end->get_position()) );
+
+  const value_type dy = evaluate_derived
+    ( t, traits::get_y(m_origin->get_position()),
+      traits::get_y(m_origin->get_output_direction()),
+      traits::get_y(m_end->get_input_direction()),
+      traits::get_y(m_end->get_position()) );
+
+  if ( dx == 0 )
+    return (dy < 0) ? -1 : 1;
+  else
+    return dy / dx;
 } // curve::section::get_tangent_at()
 
 /*----------------------------------------------------------------------------*/
@@ -155,6 +170,32 @@ claw::math::curve<C, Traits>::section::evaluate
     + 3 * input_direction * t * t * dt
     + end * t * t * t;
 } // curve::section::evaluate()
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Get the value at a given date of the curve's derived equation on one
+ *        dimension.
+ * \param t The date at which the value us computed.
+ * \param origin The value on the computed dimension of the first point of the
+ *        section of the curve.
+ * \param output_direction The value on the computed dimension of the point in
+ *        the direction of which the curve leaves \a origin.
+ * \param input_direction The value on the computed dimension of the point in
+ *        the direction of which the curve enters \a end.
+ * \param origin The value on the computed dimension of the last point of the
+ *        section of the curve.
+ */
+template<typename C, typename Traits>
+claw::math::curve<C, Traits>::section::value_type
+claw::math::curve<C, Traits>::section::evaluate_derived
+( double t, value_type origin, value_type output_direction,
+  value_type input_direction, value_type end ) const
+{
+  return - 3 * origin + 3 * output_direction
+    + (6 * origin - 12 * output_direction + 6 * input_direction) * t
+    + (-3 * origin + 9 * output_direction - 9 * input_direction + 3 * end)
+    * t * t;
+} // curve::section::evaluate_derived()
 
 
 
@@ -224,7 +265,7 @@ template<typename C, typename Traits>
 std::vector<claw::math::curve<C, Traits>::coordinate_type>
 claw::math::curve<C, Traits>::get_y_at( value_type x ) const
 {
-
+  return std::vector<coordinate_type>();
 } // curve::get_y_at()
 
 /*----------------------------------------------------------------------------*/
