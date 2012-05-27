@@ -51,7 +51,7 @@ namespace claw
      * \author Julien Jorge
      */
     template<typename T>
-    struct coordinate_2d< claw::math::coordinate_2d<T> >
+    struct coordinate_traits< claw::math::coordinate_2d<T> >
     {
       /** \brief The type of the coordinate. */
       typedef claw::math::coordinate_2d<T> coordinate_type;
@@ -88,7 +88,52 @@ namespace claw
         return coordinate_type(x, y);
       } // make_coordinate()
 
-    } // struct coordinate_traits [claw::math::coordinate_2d]
+    }; // struct coordinate_traits [claw::math::coordinate_2d]
+
+    /**
+     * \brief Specialization of the coordinate_traits for
+     *        claw::math::vector_2d.
+     * \author Julien Jorge
+     */
+    template<typename T>
+    struct coordinate_traits< claw::math::vector_2d<T> >
+    {
+      /** \brief The type of the coordinate. */
+      typedef claw::math::vector_2d<T> coordinate_type;
+
+      /** \brief The type of the components of the coordinate. */
+      typedef typename coordinate_type::value_type value_type;
+
+      /**
+       * \brief Get the component of a coordinate on the x-axis.
+       * \param c The coordinate from which the component is taken.
+       */
+      static value_type get_x( const coordinate_type& c )
+      {
+        return c.x;
+      } // get_x()
+
+      /**
+       * \brief Get the component of a coordinate on the y-axis.
+       * \param c The coordinate from which the component is taken.
+       */
+      static value_type get_y( const coordinate_type& c )
+      {
+        return c.y;
+      } // get_y()
+
+      /**
+       * \brief Create a new coordinate from with the components sets to the
+       *        provided values.
+       * \param x The position on the x axis.
+       * \param y The position on the y axis.
+       */
+      static coordinate_type make_coordinate( value_type x, value_type y )
+      {
+        return coordinate_type(x, y);
+      } // make_coordinate()
+
+    }; // struct coordinate_traits [claw::math::vector_2d]
 
   } // namespace math
 } // namespace claw

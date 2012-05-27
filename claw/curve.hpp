@@ -30,6 +30,8 @@
 #define __CLAW_MATH_CURVE_HPP__
 
 #include <claw/coordinate_traits.hpp>
+#include <list>
+#include <vector>
 
 namespace claw
 {
@@ -52,10 +54,10 @@ namespace claw
 
       /** \brief The traits provide an access to the properties of the
           coordinates. */
-      typedef Traits coordinate_traits_type;
+      typedef Traits traits_type;
 
       /** \brief The type of the components of the coordinates. */
-      typedef typename coordinate_traits_type::value_type value_type;
+      typedef typename traits_type::value_type value_type;
 
       /**
        * \brief The control_point class describes a control point of the curve,
@@ -70,10 +72,10 @@ namespace claw
 
         /** \brief The traits provide an access to the properties of the
             coordinates. */
-        typedef Traits coordinate_traits_type;
+        typedef Traits traits_type;
 
         /** \brief The type of the components of the coordinates. */
-        typedef typename coordinate_traits_type::value_type value_type;
+        typedef typename traits_type::value_type value_type;
 
       public:
         control_point();
@@ -81,6 +83,10 @@ namespace claw
         control_point
         ( const coordinate_type& p, const coordinate_type& input_direction,
           const coordinate_type& output_direction );
+
+        const coordinate_type& get_position() const;
+        const coordinate_type& get_input_direction() const;
+        const coordinate_type& get_output_direction() const;
 
       private:
         /** \brief The position of this control point in the space. */
@@ -96,49 +102,6 @@ namespace claw
 
       }; // class control_point
 
-      /**
-       * \brief A section is a part of the curve between two control points.
-       * \author Julien Jorge
-       */
-      class section
-      {
-      public:
-        /** \brief The type of the coordinates of the curve. */
-        typedef C coordinate_type;
-
-        /** \brief The traits provide an access to the properties of the
-            coordinates. */
-        typedef Traits coordinate_traits_type;
-
-        /** \brief The type of the components of the coordinates. */
-        typedef typename coordinate_traits_type::value_type value_type;
-
-        /** \brief The type of the iterators on the ends of the section. */
-        typedef const_iterator iterator_type;
-
-      public:
-        section( const iterator_type& origin, const iterator_type& end );
-
-        coordinate_type get_point_at( double t ) const;
-        value_type get_tangent_at( double t ) const;
-
-      private:
-        value_type evaluate
-        ( double t, value_type origin, value_type output_direction,
-          value_type input_direction, value_type end ) const;
-        value_type evaluate_derived
-        ( double t, value_type origin, value_type output_direction,
-          value_type input_direction, value_type end ) const;
-
-      private:
-        /** \brief The point at the beginning of the section. */
-        const iterator_type m_origin;
-
-        /** \brief The point at the end of the section. */
-        const iterator_type m_end;
-
-      }; // class section
-
     private:
       /** \brief The type of the container in which the control points are
           stored. */
@@ -151,13 +114,99 @@ namespace claw
       /** \brief The type of the iterator on the control points of the curve. */
       typedef typename control_point_list::const_iterator const_iterator;
 
+      /**
+       * \brief A section is a part of the curve between two control points.
+       * \author Julien Jorge
+       */
+      class section
+      {
+      public:
+        /** \brief The type of the coordinates of the curve. */
+        typedef C coordinate_type;
+
+        /** \brief The traits provide an access to the properties of the
+            coordinates. */
+        typedef Traits traits_type;
+
+        /** \brief The type of the components of the coordinates. */
+        typedef typename traits_type::value_type value_type;
+
+        /** \brief The type of the iterators on the ends of the section. */
+        typedef const_iterator iterator_type;
+
+        /**
+         * \brief The resolved point class is a point found on a section.
+         * \author Julien Jorge
+         */
+        struct resolved_point
+        {
+        public:
+          /** \brief The type of the coordinates of the curve. */
+          typedef C coordinate_type;
+
+        public:
+          resolved_point
+          ( const coordinate_type& position, const section& s, const double t );
+
+          const coordinate_type& get_position() const;
+          const section& get_section() const;
+          double get_date() const;
+
+        private:
+          /** \brief The coordinates of the point. */
+          coordinate_type m_position;
+
+          /** \brief The section on which the point is. */
+          section m_section;
+
+          /** \brief The date at which the point is on the section. */
+          double m_date;
+
+        }; // struct resolved_point
+
+      public:
+        explicit section( const iterator_type& origin );
+        section( const iterator_type& origin, const iterator_type& end );
+
+        coordinate_type get_point_at( double t ) const;
+        coordinate_type get_tangent_at( double t ) const;
+        std::vector<resolved_point> get_point_at_x( value_type x ) const;
+
+        const iterator_type& get_origin() const;
+
+        bool empty() const;
+
+        value_type get_length() const;
+        value_type get_length( double t ) const;
+
+      private:
+        value_type evaluate
+        ( double t, value_type origin, value_type output_direction,
+          value_type input_direction, value_type end ) const;
+        value_type evaluate_derived
+        ( double t, value_type origin, value_type output_direction,
+          value_type input_direction, value_type end ) const;
+
+      private:
+        /** \brief The point at the beginning of the section. */
+        iterator_type m_origin;
+
+        /** \brief The point at the end of the section. */
+        iterator_type m_end;
+
+      }; // class section
+
     public:
       void push_back( const control_point& p );
       void push_front( const control_point& p );
       void insert( const iterator& pos, const control_point& p );
 
       section get_section( const const_iterator& pos ) const;
-      std::vector<value_type> get_y_at( value_type x ) const;
+      
+      std::vector<typename section::resolved_point>
+      get_point_at_x( value_type x ) const;
+
+      value_type get_length( const const_iterator& pos ) const;
 
       iterator begin();
       iterator end();
@@ -173,6 +222,6 @@ namespace claw
   } // namespace math
 } // namespace claw
 
-#include "claw/impl/bezier.tpp"
+#include "claw/impl/curve.tpp"
 
 #endif // __CLAW_MATH_CURVE_HPP__
