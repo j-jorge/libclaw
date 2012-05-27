@@ -165,7 +165,6 @@ namespace claw
         }; // struct resolved_point
 
       public:
-        explicit section( const iterator_type& origin );
         section( const iterator_type& origin, const iterator_type& end );
 
         coordinate_type get_point_at( double t ) const;

@@ -165,20 +165,6 @@ claw::math::curve<C, Traits>::section::resolved_point::get_date() const
 
 
 
-
-/*----------------------------------------------------------------------------*/
-/**
- * \brief Constructor.
- * \param origin The point at the beginning of the section.
- * \remark The end of the section is set to std::advance(origin, 1).
- */
-template<typename C, typename Traits>
-claw::math::curve<C, Traits>::section::section( const iterator_type& origin )
-  : m_origin(origin), m_end( ++iterator_type(origin) )
-{
-
-} // curve::section::section()
-
 /*----------------------------------------------------------------------------*/
 /**
  * \brief Constructor.
@@ -261,18 +247,27 @@ claw::math::curve<C, Traits>::section::get_point_at_x( value_type x ) const
 
   if ( empty() )
     return result;
-
-  std::vector<double> roots
-    ( get_roots
-      ( x, traits_type::get_x(m_origin->get_position()),
-        traits_type::get_x(m_origin->get_output_direction()),
-        traits_type::get_x(m_end->get_input_direction()),
-        traits_type::get_x(m_end->get_position() ) ) );
   
-  for ( std::size_t i=0; i!=roots.size(); ++i )
-    if ( (roots[i] >= 0) && (roots[i] <= 1) )
-      result.push_back
-        ( resolved_point( get_point_at( roots[i] ), *this, roots[i] ) );
+  if ( x == m_origin->get_position().x )
+    result.push_back
+      ( resolved_point( m_origin->get_position(), *this, 0 ) );
+  else if ( x == m_end->get_position().x )
+    result.push_back
+      ( resolved_point( m_end->get_position(), *this, 1 ) );
+  else
+    {        
+      const std::vector<double> roots
+        ( get_roots
+          ( x, traits_type::get_x(m_origin->get_position()),
+            traits_type::get_x(m_origin->get_output_direction()),
+            traits_type::get_x(m_end->get_input_direction()),
+            traits_type::get_x(m_end->get_position() ) ) );
+  
+      for ( std::size_t i=0; i!=roots.size(); ++i )
+        if ( (roots[i] >= 0) && (roots[i] <= 1) )
+          result.push_back
+            ( resolved_point( get_point_at( roots[i] ), *this, roots[i] ) );
+    }
 
   return result;
 } // curve::section::get_point_at_x()
@@ -320,6 +315,9 @@ template<typename C, typename Traits>
 typename claw::math::curve<C, Traits>::section::value_type
 claw::math::curve<C, Traits>::section::get_length( double t ) const
 {
+  if ( empty() )
+    return 0;
+
   const value_type dx_0 = evaluate_derived
     ( 0, traits_type::get_x(m_origin->get_position()),
       traits_type::get_x(m_origin->get_output_direction()),
@@ -344,11 +342,10 @@ claw::math::curve<C, Traits>::section::get_length( double t ) const
       traits_type::get_y(m_end->get_input_direction()),
       traits_type::get_y(m_end->get_position()) );
 
-  const value_type d_0( std::sqrt( dx_0 * dx_0 + dy_0 * dy_0 ) );
-  const value_type d_t( std::sqrt( dx_t * dx_t + dy_t * dy_t ) );
+  const value_type d_0( dx_0 * dx_0 + dy_0 * dy_0 );
+  const value_type d_t( dx_t * dx_t + dy_t * dy_t );
 
-  return ( d_t * d_t * std::sqrt(d_t)
-           - ( d_0 * d_0 * std::sqrt(d_0) ) ) * 2 / 3;
+  return ( d_t * std::sqrt(d_t) - d_0 * std::sqrt(d_0) ) * 2 / 3;
 } // curve::section::get_length()
 
 /*----------------------------------------------------------------------------*/
@@ -481,14 +478,14 @@ claw::math::curve<C, Traits>::section::get_roots_degree_3
 {
   // The following is the application of the method of Cardan
 
-  const value_type p( -(b * b) / (3 * a * a) + c / a );
+  const value_type p( -(b * b) / (3.0 * a * a) + c / a );
   const value_type q
-    ( ( b / (27 * a) )
-      * ( (2 * b * b) / (a * a)
-          - 9 * c / a )
+    ( ( b / (27.0 * a) )
+      * ( (2.0 * b * b) / (a * a)
+          - 9.0 * c / a )
       + d / a );
 
-  const value_type delta( q * q + 4 * p * p * p / 27 );
+  const value_type delta( q * q + 4.0 * p * p * p / 27.0 );
 
   std::vector<double> result;
 
@@ -498,23 +495,25 @@ claw::math::curve<C, Traits>::section::get_roots_degree_3
         result.push_back(0);
       else
         {
-          result.push_back( 3 * q / p );
-          result.push_back( - 3 * q / (2 * p) );
+          result.push_back( 3.0 * q / p );
+          result.push_back( - 3.0 * q / (2.0 * p) );
         }
     }
   else if ( delta > 0 )
+    {
     result.push_back
       ( boost::math::cbrt
-        ( (-q + std::sqrt(delta)) / 2 )
+        ( (-q + std::sqrt(delta)) / 2.0 )
         + boost::math::cbrt
-        ( (-q - std::sqrt(delta)) / 2 ) );
+        ( (-q - std::sqrt(delta)) / 2.0 ) );
+    }
   else
     for ( std::size_t i=0; i!=3; ++i )
       result.push_back
-        ( 2 * std::sqrt( -p / 3 )
+        ( 2.0 * std::sqrt( -p / 3.0 )
           * std::cos
-          ( std::acos( std::sqrt(27 / (- p * p * p)) * - q / 2 ) / 3
-            + 2 * i * boost::math::constants::pi<value_type>() / 3 ) );
+          ( std::acos( std::sqrt(27.0 / (- p * p * p)) * - q / 2.0 ) / 3.0
+            + 2.0 * i * boost::math::constants::pi<double>() / 3.0 ) );
 
   return result;
 } // curve::section::get_roots_degree_3()
@@ -592,10 +591,14 @@ claw::math::curve<C, Traits>::get_point_at_x( value_type x ) const
 
   for ( const_iterator it=begin(); it!=end(); ++it )
     {
-      const section s(it);
-      const result_type new_points( s.get_point_at_x(x) );
+      const section s( get_section(it) );
 
-      result.insert( result.end(), new_points.begin(), new_points.end() );
+      if ( !s.empty() )
+        {
+          const result_type new_points( s.get_point_at_x(x) );
+
+          result.insert( result.end(), new_points.begin(), new_points.end() );
+        }
     }
 
   return result;
@@ -614,9 +617,9 @@ claw::math::curve<C, Traits>::get_length( const const_iterator& pos ) const
 {
   value_type result(0);
 
-  for ( const_iterator it=begin(); it!=pos; ++it )
+  for ( const_iterator it=begin(); it!=end(); ++it )
     {
-      const section s(it);
+      const section s( get_section(it) );
       result += s.get_length();
     }
 
