@@ -26,6 +26,8 @@
  * \brief Implementation of claw::math::curve.
  * \author Julien Jorge
  */
+#include <boost/math/special_functions/cbrt.hpp>
+#include <boost/math/constants/constants.hpp>
 
 /*----------------------------------------------------------------------------*/
 /**
@@ -260,7 +262,17 @@ claw::math::curve<C, Traits>::section::get_point_at_x( value_type x ) const
   if ( empty() )
     return result;
 
-  // todo: compute the points.
+  std::vector<double> roots
+    ( get_roots
+      ( x, traits_type::get_x(m_origin->get_position()),
+        traits_type::get_x(m_origin->get_output_direction()),
+        traits_type::get_x(m_end->get_input_direction()),
+        traits_type::get_x(m_end->get_position() ) ) );
+  
+  for ( std::size_t i=0; i!=roots.size(); ++i )
+    if ( (roots[i] >= 0) && (roots[i] <= 1) )
+      result.push_back
+        ( resolved_point( get_point_at( roots[i] ), *this, roots[i] ) );
 
   return result;
 } // curve::section::get_point_at_x()
@@ -392,6 +404,121 @@ claw::math::curve<C, Traits>::section::evaluate_derived
     + (-3 * origin + 9 * output_direction - 9 * input_direction + 3 * end)
     * t * t;
 } // curve::section::evaluate_derived()
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Get the dates at which the curve passes at a given coordinate, on a
+          given dimension.
+ * \param x The coordinate for which we want the dates.
+ * \param origin The value on the computed dimension of the first point of the
+ *        section of the curve.
+ * \param output_direction The value on the computed dimension of the point in
+ *        the direction of which the curve leaves \a origin.
+ * \param input_direction The value on the computed dimension of the point in
+ *        the direction of which the curve enters \a end.
+ * \param origin The value on the computed dimension of the last point of the
+ *        section of the curve.
+ */
+template<typename C, typename Traits>
+std::vector<double>
+claw::math::curve<C, Traits>::section::get_roots
+( value_type x, value_type origin, value_type output_direction,
+  value_type input_direction, value_type end ) const
+{
+  const value_type a
+    (-origin + 3 * output_direction - 3 * input_direction + end );
+  const value_type b( 3 * origin - 6 * output_direction + 3 * input_direction );
+  const value_type c( -3 * origin + 3 * output_direction );
+  const value_type d( origin - x );
+
+  if ( a == 0 )
+    return get_roots_degree_2(b, c, d);
+  else
+    return get_roots_degree_3(a, b, c, d);
+} // curve::section::get_roots()
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Get the dates at which the curve passes at a given coordinate, in the
+ *        case where the equation is a reduced to a polynom of degree 2.
+ * \param a The coefficient of the square part of the equation.
+ * \param b The coefficient of the linear part of the equation.
+ * \param c The constant of the equation.
+ */
+template<typename C, typename Traits>
+std::vector<double>
+claw::math::curve<C, Traits>::section::get_roots_degree_2
+( value_type a, value_type b, value_type c ) const
+{
+  const value_type delta( b * b - 4 * a * c );
+
+  std::vector<double> result;
+
+  if ( delta == 0 )
+    result.push_back( - b / ( 2 * a ) );
+  else if ( delta > 0 )
+    {
+      result.push_back( (-b - std::sqrt(delta)) / (2 * a) );
+      result.push_back( (-b + std::sqrt(delta)) / (2 * a) );
+    }
+
+  return result;
+} // curve::section::get_roots_degree_2()
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Get the dates at which the curve passes at a given coordinate, in the
+ *        case where the equation is a reduced to a polynom of degree 3.
+ * \param a The coefficient of the cubic part of the equation.
+ * \param b The coefficient of the square part of the equation.
+ * \param c The coefficient of the linear part of the equation.
+ * \param d The constant of the equation.
+ */
+template<typename C, typename Traits>
+std::vector<double>
+claw::math::curve<C, Traits>::section::get_roots_degree_3
+( value_type a, value_type b, value_type c, value_type d ) const
+{
+  // The following is the application of the method of Cardan
+
+  const value_type p( -(b * b) / (3 * a * a) + c / a );
+  const value_type q
+    ( ( b / (27 * a) )
+      * ( (2 * b * b) / (a * a)
+          - 9 * c / a )
+      + d / a );
+
+  const value_type delta( q * q + 4 * p * p * p / 27 );
+
+  std::vector<double> result;
+
+  if ( delta == 0 )
+    {
+      if ( p == 0 )
+        result.push_back(0);
+      else
+        {
+          result.push_back( 3 * q / p );
+          result.push_back( - 3 * q / (2 * p) );
+        }
+    }
+  else if ( delta > 0 )
+    result.push_back
+      ( boost::math::cbrt
+        ( (-q + std::sqrt(delta)) / 2 )
+        + boost::math::cbrt
+        ( (-q - std::sqrt(delta)) / 2 ) );
+  else
+    for ( std::size_t i=0; i!=3; ++i )
+      result.push_back
+        ( 2 * std::sqrt( -p / 3 )
+          * std::cos
+          ( std::acos( std::sqrt(27 / (- p * p * p)) * - q / 2 ) / 3
+            + 2 * i * boost::math::constants::pi<value_type>() / 3 ) );
+
+  return result;
+} // curve::section::get_roots_degree_3()
+
 
 
 

@@ -187,6 +187,15 @@ namespace claw
         ( double t, value_type origin, value_type output_direction,
           value_type input_direction, value_type end ) const;
 
+        std::vector<double> get_roots
+        ( value_type x, value_type origin, value_type output_direction,
+          value_type input_direction, value_type end ) const;
+
+        std::vector<double> get_roots_degree_2
+        ( value_type a, value_type b, value_type c ) const;
+        std::vector<double> get_roots_degree_3
+        ( value_type a, value_type b, value_type c, value_type d ) const;
+
       private:
         /** \brief The point at the beginning of the section. */
         iterator_type m_origin;
