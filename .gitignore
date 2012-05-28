@@ -13,6 +13,9 @@ claw/version.hpp
 *.a
 *.so.*
 *.so
+examples/*/ex-*
+examples/*/*/ex-*
+examples/graph/mk_test
 
 # Temporary files
 *~
