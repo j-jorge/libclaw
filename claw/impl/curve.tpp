@@ -264,9 +264,8 @@ claw::math::curve<C, Traits>::section::get_point_at_x( value_type x ) const
             traits_type::get_x(m_end->get_position() ) ) );
   
       for ( std::size_t i=0; i!=roots.size(); ++i )
-        if ( (roots[i] >= 0) && (roots[i] <= 1) )
-          result.push_back
-            ( resolved_point( get_point_at( roots[i] ), *this, roots[i] ) );
+        result.push_back
+          ( resolved_point( get_point_at( roots[i] ), *this, roots[i] ) );
     }
 
   return result;
