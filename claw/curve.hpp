@@ -220,7 +220,7 @@ namespace claw
       section get_section( const const_iterator& pos ) const;
       
       std::vector<typename section::resolved_point>
-      get_point_at_x( value_type x ) const;
+      get_point_at_x( value_type x, bool off_domain = false ) const;
 
       value_type get_length( const const_iterator& pos ) const;
 
@@ -228,6 +228,12 @@ namespace claw
       iterator end();
       const_iterator begin() const;
       const_iterator end() const;
+
+    private:
+      std::vector<typename section::resolved_point>
+      get_point_at_x_before_origin( value_type x ) const;
+      std::vector<typename section::resolved_point>
+      get_point_at_x_after_end( value_type x ) const;
 
     private:
       /** \brief The points of this curve. */

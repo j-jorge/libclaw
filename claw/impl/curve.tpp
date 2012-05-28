@@ -649,14 +649,17 @@ claw::math::curve<C, Traits>::get_section( const const_iterator& pos ) const
 /**
  * \brief Get the points having the given x-coordinate on the curve.
  * \param x The coordinate for which we want the points.
+ * \param off_domain Tell the method to keep the points found at a date outside
+ *        [0, 1].
  */
 template<typename C, typename Traits>
 std::vector< typename claw::math::curve<C, Traits>::section::resolved_point >
-claw::math::curve<C, Traits>::get_point_at_x( value_type x ) const
+claw::math::curve<C, Traits>::get_point_at_x
+( value_type x, bool off_domain ) const
 {
   typedef std::vector<typename section::resolved_point> result_type;
   result_type result;
-
+  
   for ( const_iterator it=begin(); it!=end(); ++it )
     {
       const section s( get_section(it) );
@@ -664,9 +667,17 @@ claw::math::curve<C, Traits>::get_point_at_x( value_type x ) const
       if ( !s.empty() )
         {
           const result_type new_points( s.get_point_at_x(x) );
-
           result.insert( result.end(), new_points.begin(), new_points.end() );
         }
+    }
+
+  if ( off_domain )
+    {
+      const result_type before( get_point_at_x_before_origin(x) );
+      result.insert( result.begin(), before.begin(), before.end() );
+
+      const result_type after( get_point_at_x_after_end(x) );
+      result.insert( result.end(), after.begin(), after.end() );
     }
 
   return result;
@@ -737,3 +748,64 @@ claw::math::curve<C, Traits>::end() const
 {
   return m_points.end();
 } // curve::end()
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Get the points having the given x-coordinate before the origin of the
+ *        curve.
+ * \param x The coordinate for which we want the points.
+ */
+template<typename C, typename Traits>
+std::vector< typename claw::math::curve<C, Traits>::section::resolved_point >
+claw::math::curve<C, Traits>::get_point_at_x_before_origin( value_type x ) const
+{
+  typedef std::vector<typename section::resolved_point> result_type;
+  result_type result;
+  
+  const section s( get_section(begin()) );
+
+  if ( !s.empty() )
+    {
+      const result_type points( s.get_point_at_x(x, true) );
+
+      for ( std::size_t i(0); i!=points.size(); ++i )
+        if ( points[i].get_date() < 0 )
+          result.push_back( points[i] );
+    }
+
+  return result;
+} // curve::get_point_at_x_before_origin()
+
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Get the points having the given x-coordinate after the end of the
+ *        curve.
+ * \param x The coordinate for which we want the points.
+ */
+template<typename C, typename Traits>
+std::vector< typename claw::math::curve<C, Traits>::section::resolved_point >
+claw::math::curve<C, Traits>::get_point_at_x_after_end( value_type x ) const
+{
+  typedef std::vector<typename section::resolved_point> result_type;
+  result_type result;
+  
+  if ( m_points.size() < 2 )
+    return result;
+
+  const_iterator it(end());
+  std::advance(it, -2);
+
+  const section s( get_section( it ) );
+
+  if ( !s.empty() )
+    {
+      const result_type points( s.get_point_at_x(x, true) );
+
+      for ( std::size_t i(0); i!=points.size(); ++i )
+        if ( points[i].get_date() > 1 )
+          result.push_back( points[i] );
+    }
+
+  return result;
+} // curve::get_point_at_x_after_end()
