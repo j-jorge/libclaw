@@ -169,7 +169,8 @@ namespace claw
 
         coordinate_type get_point_at( double t ) const;
         coordinate_type get_tangent_at( double t ) const;
-        std::vector<resolved_point> get_point_at_x( value_type x ) const;
+        std::vector<resolved_point>
+        get_point_at_x( value_type x, bool off_domain = false  ) const;
 
         const iterator_type& get_origin() const;
 
@@ -185,6 +186,13 @@ namespace claw
         value_type evaluate_derived
         ( double t, value_type origin, value_type output_direction,
           value_type input_direction, value_type end ) const;
+
+        void ensure_ends_in_points
+        ( std::vector<resolved_point>& p, bool ensure_origin,
+          bool ensure_end ) const;
+
+        std::vector<resolved_point>
+        extract_domain_points( const std::vector<resolved_point>& p ) const;
 
         std::vector<double> get_roots
         ( value_type x, value_type origin, value_type output_direction,

@@ -238,37 +238,38 @@ claw::math::curve<C, Traits>::section::get_tangent_at( double t ) const
 /**
  * \brief Get the points having the given x-coordinate on this section.
  * \param x The coordinate for which we want the points.
+ * \param off_domain Tell the method to keep the points found at a date outside
+ *        [0, 1].
  */
 template<typename C, typename Traits>
 std::vector<typename claw::math::curve<C, Traits>::section::resolved_point>
-claw::math::curve<C, Traits>::section::get_point_at_x( value_type x ) const
+claw::math::curve<C, Traits>::section::get_point_at_x
+( value_type x, bool off_domain ) const
 {
   std::vector<resolved_point> result;
 
   if ( empty() )
     return result;
   
-  if ( x == m_origin->get_position().x )
-    result.push_back
-      ( resolved_point( m_origin->get_position(), *this, 0 ) );
-  else if ( x == m_end->get_position().x )
-    result.push_back
-      ( resolved_point( m_end->get_position(), *this, 1 ) );
-  else
-    {        
-      const std::vector<double> roots
-        ( get_roots
-          ( x, traits_type::get_x(m_origin->get_position()),
-            traits_type::get_x(m_origin->get_output_direction()),
-            traits_type::get_x(m_end->get_input_direction()),
-            traits_type::get_x(m_end->get_position() ) ) );
+  const std::vector<double> roots
+    ( get_roots
+      ( x, traits_type::get_x(m_origin->get_position()),
+        traits_type::get_x(m_origin->get_output_direction()),
+        traits_type::get_x(m_end->get_input_direction()),
+        traits_type::get_x(m_end->get_position() ) ) );
   
-      for ( std::size_t i=0; i!=roots.size(); ++i )
-        result.push_back
-          ( resolved_point( get_point_at( roots[i] ), *this, roots[i] ) );
-    }
+  for ( std::size_t i=0; i!=roots.size(); ++i )
+    result.push_back
+      ( resolved_point( get_point_at( roots[i] ), *this, roots[i] ) );
 
-  return result;
+  ensure_ends_in_points
+    ( result,
+      (x == m_origin->get_position().x), (x == m_end->get_position().x) );
+
+  if ( !off_domain )
+    return extract_domain_points( result );
+  else
+    return result;
 } // curve::section::get_point_at_x()
 
 /*----------------------------------------------------------------------------*/
@@ -400,6 +401,74 @@ claw::math::curve<C, Traits>::section::evaluate_derived
     + (-3 * origin + 9 * output_direction - 9 * input_direction + 3 * end)
     * t * t;
 } // curve::section::evaluate_derived()
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Ensure that a vector of resolved_point contains some ends of the
+ *        curve.
+ *
+ * The computation on the doubles values may produce approximated resolved
+ * points. If one end of the curve is expected to be in the resolved point, then
+ * this procedure replaces the nearest resolved point by a resolved point on
+ * the adequate end.
+ *
+ * \param p The points to filter.
+ * \param ensure_origin Tell to guarantee that the origin is present in \a p.
+ * \param ensure_end Tell to guarantee that the end is present in \a p.
+ */
+template<typename C, typename Traits>
+void claw::math::curve<C, Traits>::section::ensure_ends_in_points
+( std::vector<resolved_point>& p, bool ensure_origin, bool ensure_end ) const
+{
+  double min_distance_origin( std::numeric_limits<double>::max() );
+  double min_distance_end( std::numeric_limits<double>::max() );
+  std::size_t origin_index(p.size());
+  std::size_t end_index(p.size());
+
+  for ( std::size_t i=0; i!=p.size(); ++i )
+    {
+      const double distance_origin( std::abs( p[i].get_date() ) );
+
+      if ( distance_origin <= min_distance_origin )
+        {
+          min_distance_origin = distance_origin;
+          origin_index = i;
+        }
+
+      const double distance_end( std::abs( 1 - p[i].get_date() ) );
+
+      if ( distance_end <= min_distance_end )
+        {
+          min_distance_end = distance_end;
+          end_index = i;
+        }
+    }
+
+  if ( ensure_origin )
+    p[origin_index] = resolved_point( m_origin->get_position(), *this, 0.0 );
+
+  if ( ensure_end )
+    p[end_index] = resolved_point( m_end->get_position(), *this, 1.0 );
+} // curve::section::ensure_ends_in_points()
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Extract the points in the domain of the curve.
+ * \param p The points from which we extract the ones whose date is in [0, 1].
+ */
+template<typename C, typename Traits>
+std::vector<typename claw::math::curve<C, Traits>::section::resolved_point>
+claw::math::curve<C, Traits>::section::extract_domain_points
+( const std::vector<resolved_point>& p ) const
+{
+  std::vector<resolved_point> clean_result;
+
+  for ( std::size_t i=0; i!=p.size(); ++i )
+    if ( (p[i].get_date() >= 0) && (p[i].get_date() <= 1) )
+      clean_result.push_back( p[i] );
+
+  return clean_result;
+} // curve::section::extract_domain_points()
 
 /*----------------------------------------------------------------------------*/
 /**
