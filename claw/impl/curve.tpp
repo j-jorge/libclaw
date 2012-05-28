@@ -651,6 +651,8 @@ claw::math::curve<C, Traits>::get_section( const const_iterator& pos ) const
  * \param x The coordinate for which we want the points.
  * \param off_domain Tell the method to keep the points found at a date outside
  *        [0, 1].
+ *
+ * \todo Remove the duplicates in the result.
  */
 template<typename C, typename Traits>
 std::vector< typename claw::math::curve<C, Traits>::section::resolved_point >
@@ -775,7 +777,6 @@ claw::math::curve<C, Traits>::get_point_at_x_before_origin( value_type x ) const
 
   return result;
 } // curve::get_point_at_x_before_origin()
-
 
 /*----------------------------------------------------------------------------*/
 /**
