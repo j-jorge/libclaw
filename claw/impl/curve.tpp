@@ -296,60 +296,6 @@ bool claw::math::curve<C, Traits>::section::empty() const
 
 /*----------------------------------------------------------------------------*/
 /**
- * \brief Get the length of this section.
- */
-template<typename C, typename Traits>
-typename claw::math::curve<C, Traits>::section::value_type
-claw::math::curve<C, Traits>::section::get_length() const
-{
-  return get_length(1);
-} // curve::section::get_length()
-
-/*----------------------------------------------------------------------------*/
-/**
- * \brief Get the length of the part of this section between the origin and the
- *        point at the given date.
- * \param t The date up to which the length is measured.
- */
-template<typename C, typename Traits>
-typename claw::math::curve<C, Traits>::section::value_type
-claw::math::curve<C, Traits>::section::get_length( double t ) const
-{
-  if ( empty() )
-    return 0;
-
-  const value_type dx_0 = evaluate_derived
-    ( 0, traits_type::get_x(m_origin->get_position()),
-      traits_type::get_x(m_origin->get_output_direction()),
-      traits_type::get_x(m_end->get_input_direction()),
-      traits_type::get_x(m_end->get_position()) );
-
-  const value_type dy_0 = evaluate_derived
-    ( 0, traits_type::get_y(m_origin->get_position()),
-      traits_type::get_y(m_origin->get_output_direction()),
-      traits_type::get_y(m_end->get_input_direction()),
-      traits_type::get_y(m_end->get_position()) );
-
-  const value_type dx_t = evaluate_derived
-    ( t, traits_type::get_x(m_origin->get_position()),
-      traits_type::get_x(m_origin->get_output_direction()),
-      traits_type::get_x(m_end->get_input_direction()),
-      traits_type::get_x(m_end->get_position()) );
-
-  const value_type dy_t = evaluate_derived
-    ( t, traits_type::get_y(m_origin->get_position()),
-      traits_type::get_y(m_origin->get_output_direction()),
-      traits_type::get_y(m_end->get_input_direction()),
-      traits_type::get_y(m_end->get_position()) );
-
-  const value_type d_0( dx_0 * dx_0 + dy_0 * dy_0 );
-  const value_type d_t( dx_t * dx_t + dy_t * dy_t );
-
-  return ( d_t * std::sqrt(d_t) - d_0 * std::sqrt(d_0) ) * 2 / 3;
-} // curve::section::get_length()
-
-/*----------------------------------------------------------------------------*/
-/**
  * \brief Get the value of the curve's equation on one dimension, at a given
  *        date.
  * \param t The date at which the value us computed.
@@ -684,28 +630,6 @@ claw::math::curve<C, Traits>::get_point_at_x
 
   return result;
 } // curve::get_point_at_x()
-
-/*----------------------------------------------------------------------------*/
-/**
- * \brief Get the length of the curve up between the first control point and a
- *        given control point.
- * \param pos An iterator on the control point up to which the length is
- *        computed.
- */
-template<typename C, typename Traits>
-typename claw::math::curve<C, Traits>::value_type
-claw::math::curve<C, Traits>::get_length( const const_iterator& pos ) const
-{
-  value_type result(0);
-
-  for ( const_iterator it=begin(); it!=end(); ++it )
-    {
-      const section s( get_section(it) );
-      result += s.get_length();
-    }
-
-  return result;
-} // curve::get_length()
 
 /*----------------------------------------------------------------------------*/
 /**

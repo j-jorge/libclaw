@@ -176,9 +176,6 @@ namespace claw
 
         bool empty() const;
 
-        value_type get_length() const;
-        value_type get_length( double t ) const;
-
       private:
         value_type evaluate
         ( double t, value_type origin, value_type output_direction,
@@ -221,8 +218,6 @@ namespace claw
       
       std::vector<typename section::resolved_point>
       get_point_at_x( value_type x, bool off_domain = false ) const;
-
-      value_type get_length( const const_iterator& pos ) const;
 
       iterator begin();
       iterator end();
