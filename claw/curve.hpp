@@ -70,13 +70,6 @@ namespace claw
         /** \brief The type of the coordinates of the curve. */
         typedef C coordinate_type;
 
-        /** \brief The traits provide an access to the properties of the
-            coordinates. */
-        typedef Traits traits_type;
-
-        /** \brief The type of the components of the coordinates. */
-        typedef typename traits_type::value_type value_type;
-
       public:
         control_point();
         explicit control_point( const coordinate_type& p );
@@ -138,7 +131,7 @@ namespace claw
          * \brief The resolved point class is a point found on a section.
          * \author Julien Jorge
          */
-        struct resolved_point
+        class resolved_point
         {
         public:
           /** \brief The type of the coordinates of the curve. */
@@ -162,7 +155,7 @@ namespace claw
           /** \brief The date at which the point is on the section. */
           double m_date;
 
-        }; // struct resolved_point
+        }; // class resolved_point
 
       public:
         section( const iterator_type& origin, const iterator_type& end );

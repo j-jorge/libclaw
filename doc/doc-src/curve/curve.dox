@@ -1,0 +1,231 @@
+/*! \page curves Bézier curves
+
+The claw::math::curve class is a C++ implémentation of the
+parameterized curves known as Bézier curve. These are curves are
+defined as follows:
+\math{\leftbrace {x(t) = \sum_0^n }{y(t) = \sum_0^n auinest} }
+
+This implementation is restricted to the case of the cubic curves
+(n=3).
+
+A curve is defined by a sequence of points <i>p<sub>j</sub></i>
+through which the curve goes. A section <i>s<sub>j</sub></i> of the
+curve is then defined as two successive points <i>(p<sub>j</sub>,
+p<sub>j+1</sub>)</i>.
+
+The shape of the curve on a section is controlled by the output
+direction <i>o<sub>j</sub></i> of its first point and the input
+direction <i>i<sub>j+1</sub></i> of its last point.
+
+The library provides the following functionalities:
+
+ - use any type for the coordinates, as long as their traits are defined,
+ - defining a curve as a list of control points,
+ - computing the point at a given <i>t</i> on a section of the curve,
+ - computing all the points of the curve at a given x-coordinate,
+ - computing the tangent of the curve at a given <i>t</i>.
+
+<!--
+  Table of content generated with:
+    grep '\\\(sub\)*section' *.dox \
+      | cut -d' ' -f1-2 \
+      | sed 's:\\section: - \\ref:;s:\\subsection:  - \\ref:'
+-->
+
+\section curve-curve-class The curve class
+
+The curve class is defined as follows:
+
+\code
+template< typename C, typename Traits = coordinate_traits<C> >
+class curve
+{
+public:
+  typedef C coordinate_type;
+
+  typedef Traits traits_type;
+
+  typedef typename traits_type::value_type value_type;
+
+  // see below for the details
+  class control_point;
+
+public:
+  typedef implementation_defined iterator;
+
+  typedef implementation_defined const_iterator;
+
+  // see below for the details
+  class section
+  {
+  public:
+    // see below for the details
+    class resolved_point;
+
+  }; // class section
+
+public:
+  void push_back( const control_point& p );
+  void push_front( const control_point& p );
+  void insert( const iterator& pos, const control_point& p );
+
+  section get_section( const const_iterator& pos ) const;
+  
+  std::vector<typename section::resolved_point>
+  get_point_at_x( value_type x, bool off_domain = false ) const;
+
+  iterator begin();
+  iterator end();
+  const_iterator begin() const;
+  const_iterator end() const;
+
+}; // class curve
+\endcode
+
+The curve class is parameterized by the type of the coordinates, named
+C, and the traits to use to access their properties, named Traits.
+
+The class claw::math::coordinate_2d<T> is a good candidate for C, but
+any class can be used as long as Traits provides the following
+implementation:
+
+\code
+struct traits_interface
+{
+  /** \brief The type of the coordinate. */
+  typedef implementation_defined coordinate_type;
+
+  /** \brief The type of the components of the coordinate. */
+  typedef implementation_defined value_type;
+
+  /**
+   * \brief Get the component of a coordinate on the x-axis.
+   * \param c The coordinate from which the component is taken.
+   */
+  static value_type get_x( const coordinate_type& c );
+
+  /**
+   * \brief Get the component of a coordinate on the y-axis.
+   * \param c The coordinate from which the component is taken.
+   */
+  static value_type get_y( const coordinate_type& c );
+
+  /**
+   * \brief Create a new coordinate from with the components sets to the
+   *        provided values.
+   * \param x The position on the x axis.
+   * \param y The position on the y axis.
+   */
+  static coordinate_type make_coordinate( value_type x, value_type y );
+
+}; // struct traits_interface
+\endcode
+
+\subsection curve-control-point-class The control point class
+
+The control point class is the aggregation of a coordinate through
+which the curve goes, and two coordinates defining the direction in
+which the curve "leaves" the point.
+
+The input and output coordinates are in the same domain than the
+curve's coordinate (i.e. they are not relative to the curve's
+coordinate).
+
+The interface of the class is as follows:
+\code
+class control_point
+{
+public:
+  control_point();
+  explicit control_point( const coordinate_type& p );
+  control_point
+  ( const coordinate_type& p, const coordinate_type& input_direction,
+    const coordinate_type& output_direction );
+
+  const coordinate_type& get_position() const;
+  const coordinate_type& get_input_direction() const;
+  const coordinate_type& get_output_direction() const;
+
+}; // class control_point
+\endcode
+
+Building a control point as follows
+\code
+coordinate_type c;
+control_point p( c )
+\endcode
+is equivalent to the following code
+\code
+coordinate_type c;
+control_point p( c, c, c )
+\endcode
+
+\section curve-access-control-point Accessing the control points of the curve
+
+The control points of the curve can be accessed using iterators. The
+\code begin() \endcode and \code end() \endcode methods return
+an \c iterator repectively on the first control point of
+the curve or just past the last control point of the curve.
+
+If the call is done on a \c const \c curve then a
+\c const_iterator is returned.
+
+The iterators implements the concept of ForwardIterator and
+BackwardIterator. 
+
+\section curve-add-control-point Adding a control point to a curve
+
+Several methods can be used to insert a control point in a curve:
+ - \code void curve::push_back( const control_point& p ) \endcode will add
+ the control point <i>p</i> at the end of the curve
+
+ - \code void curve::push_front( const control_point& p ) \endcode will add
+ the control point <i>p</i> at the beginning of the curve
+
+ - \code void curve::insert( const iterator& pos, const control_point& p )
+ \endcode will add the control point <i>p</i> before the control point
+ represented by the iterator <i>pos</i>. If <i>pos == end()</i>, then
+ <i>p</i> is inserted at the end of the curve.
+
+
+\section curve-section-class The section class
+
+A section describes a part of a curve represented by two successive
+control points. One can access the section starting from the point
+represented by an iterator <i>it</i> in the curve <i>c</i> using this
+code:
+\code
+section s( c.get_section(it) );
+\endcode
+
+The interface of the section class is as follows:
+\code
+class section
+{
+public:
+  typedef curve::const_iterator iterator_type;
+
+  // see below for the details
+  class resolved_point;
+
+public:
+  section( const iterator_type& origin, const iterator_type& end );
+
+  coordinate_type get_point_at( double t ) const;
+  coordinate_type get_tangent_at( double t ) const;
+  std::vector<resolved_point>
+  get_point_at_x( value_type x, bool off_domain = false  ) const;
+
+  const iterator_type& get_origin() const;
+
+  bool empty() const;
+
+}; // class section
+\endcode
+
+
+\subsection curve-resolved-point-class The resolved_point class
+
+The control_point class is defined as follows:
+
+*/
