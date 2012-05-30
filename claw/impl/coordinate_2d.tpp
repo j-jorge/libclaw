@@ -304,5 +304,5 @@ template<typename T, typename U>
 claw::math::coordinate_2d<T>
 claw::math::operator*( U v, const coordinate_2d<T>& self )
 {
-  return self * v;
+  return self * typename coordinate_2d<T>::value_type(v);
 } // operator*() [coordinate_2d]
