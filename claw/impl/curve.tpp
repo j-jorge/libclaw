@@ -427,7 +427,7 @@ claw::math::curve<C, Traits>::section::extract_domain_points
  *        the direction of which the curve leaves \a origin.
  * \param input_direction The value on the computed dimension of the point in
  *        the direction of which the curve enters \a end.
- * \param origin The value on the computed dimension of the last point of the
+ * \param end The value on the computed dimension of the last point of the
  *        section of the curve.
  */
 template<typename C, typename Traits>
@@ -509,8 +509,8 @@ claw::math::curve<C, Traits>::section::get_roots_degree_3
         result.push_back(0);
       else
         {
-          result.push_back( 3.0 * q / p );
-          result.push_back( - 3.0 * q / (2.0 * p) );
+          result.push_back( 3.0 * q / p - b / (3.0 * a) );
+          result.push_back( - 3.0 * q / (2.0 * p)  - b / (3.0 * a) );
         }
     }
   else if ( delta > 0 )
@@ -519,7 +519,7 @@ claw::math::curve<C, Traits>::section::get_roots_degree_3
       ( boost::math::cbrt
         ( (-q + std::sqrt(delta)) / 2.0 )
         + boost::math::cbrt
-        ( (-q - std::sqrt(delta)) / 2.0 ) );
+        ( (-q - std::sqrt(delta)) / 2.0 ) - b / (3.0 * a));
     }
   else
     for ( std::size_t i=0; i!=3; ++i )
@@ -527,7 +527,8 @@ claw::math::curve<C, Traits>::section::get_roots_degree_3
         ( 2.0 * std::sqrt( -p / 3.0 )
           * std::cos
           ( std::acos( std::sqrt(27.0 / (- p * p * p)) * - q / 2.0 ) / 3.0
-            + 2.0 * i * boost::math::constants::pi<double>() / 3.0 ) );
+            + 2.0 * i * boost::math::constants::pi<double>() / 3.0 ) 
+          - b / (3.0 * a));
 
   return result;
 } // curve::section::get_roots_degree_3()
