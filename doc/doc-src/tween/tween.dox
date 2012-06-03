@@ -101,8 +101,8 @@ end of the interpolation. Then the third parameter is the total
 duration of the interpolation. The unit can be whatever the user wants
 (seconds, milliseconds, …) as long as this is the same unit used for
 the updates. Finally, the fourth parameter is the function used to
-compute the intermediate values. See \ref tweener-easing for details
-about those functions.
+compute the intermediate values. See \ref tweener-easing-functions for
+details about those functions.
 
 The next part of the example updates the tweeners until the end value
 is reached.
@@ -339,8 +339,8 @@ this is the same unit used for the updates. The fourth argument is the
 callback function called at each update. His signature must be
 <tt>void (double)</tt>, where the argument receive the current
 intermediate value. Finally, the fifth parameter is the function used
-to compute the intermediate values. See \ref tweener-easing for
-details about this topic.
+to compute the intermediate values. See \ref tweener-easing-functions
+for details about this topic.
 
 In the situation where the interpolation is done on a known variable,
 one would have to provide a callback function to assign the

@@ -11,10 +11,10 @@ msgstr ""
 "PO-Revision-Date: 2010-09-13 22:28+0100\n"
 "Last-Translator: Julien Jorge <julien.jorge@gamned.org>\n"
 "Language-Team: Français <julien.jorge@gamned.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../../../claw/code/log_stream_uniq.cpp:103

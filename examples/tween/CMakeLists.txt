@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(claw-image-example)
+project(claw-tween-example)
 
 # common flags
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ansi -pedantic -Wall" )

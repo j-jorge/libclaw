@@ -1,21 +1,51 @@
+/* -*- coding: utf-8 -*- */
 /*! \page curves Bézier curves
 
-The claw::math::curve class is a C++ implémentation of the
-parameterized curves known as Bézier curve. These are curves are
-defined as follows:
-\math{\leftbrace {x(t) = \sum_0^n }{y(t) = \sum_0^n auinest} }
+The claw::math::curve class is a C++ implementation of the
+parametrized curves known as Bézier curves.
 
-This implementation is restricted to the case of the cubic curves
-(n=3).
+<!--
+  Table of content generated with:
+    grep '\\\(sub\)*section' *.dox \
+      | cut -d' ' -f1-2 \
+      | sed 's:\\section: - \\ref:;s:\\subsection:  - \\ref:'
+-->
+ - \ref curve-introduction
+ - \ref curve-curve-class
+ - \ref curve-control-point-class
+  - \ref curve-access-control-point
+  - \ref curve-add-control-point
+ - \ref curve-resolved-point-class
+ - \ref curve-section-class
+  - \ref curve-section-point-computation
+  - \ref curve-section-properties-computation
 
-A curve is defined by a sequence of points <i>p<sub>j</sub></i>
-through which the curve goes. A section <i>s<sub>j</sub></i> of the
-curve is then defined as two successive points <i>(p<sub>j</sub>,
-p<sub>j+1</sub>)</i>.
+<!-- ----------------------------------------------------------------------- -->
+\section curve-introduction Introduction
 
-The shape of the curve on a section is controlled by the output
-direction <i>o<sub>j</sub></i> of its first point and the input
-direction <i>i<sub>j+1</sub></i> of its last point.
+The Bézier curves are defined by a starting point
+<i>P<sub>0</sub></i>, an end point <i>P<sub>n</sub></i> and a sequence
+of points (<i>P<sub>1</sub>, …, P<sub>n-1</sub></i>) controlling the
+direction of the curve between <i>P<sub>0</sub></i> and
+<i>P<sub>n</sub></i>. The points of the curve are then defined for a
+given fraction <i>t ∈ </i>[0, 1] of the length of the curve by the
+following equations:
+\f[ \left\{ \begin{array}{l}
+x(t) = \displaystyle\sum_0^n P_it^i(1-t)^{n-i} \\
+y(t) = \displaystyle\sum_0^n P_it^i(1-t)^{n-i}
+\end{array}
+\right. \quad t \in [0, 1] \f]
+
+A \ref curve-curve-class "curve" in Claw is defined by a sequence of
+points <i>p<sub>j</sub></i> through which the curve goes. A \ref
+curve-section-class "section" <i>s<sub>j</sub></i> of the curve is then
+defined as two successive points (<i>p<sub>j</sub>, p<sub>j+1</sub></i>).
+The equations of Bézier, restricted to the cubic case (<i>n=3</i>),
+are used to describe the shape of each section. This shape is
+controlled by the output direction <i>o<sub>j</sub></i> of its first
+point and the input direction <i>i<sub>j+1</sub></i> of its last
+point.
+One can then build complex curves by concatenating several sections.
 
 The library provides the following functionalities:
 
@@ -25,13 +55,7 @@ The library provides the following functionalities:
  - computing all the points of the curve at a given x-coordinate,
  - computing the tangent of the curve at a given <i>t</i>.
 
-<!--
-  Table of content generated with:
-    grep '\\\(sub\)*section' *.dox \
-      | cut -d' ' -f1-2 \
-      | sed 's:\\section: - \\ref:;s:\\subsection:  - \\ref:'
--->
-
+<!-- ----------------------------------------------------------------------- -->
 \section curve-curve-class The curve class
 
 The curve class is defined as follows:
@@ -82,12 +106,12 @@ public:
 }; // class curve
 \endcode
 
-The curve class is parameterized by the type of the coordinates, named
-C, and the traits to use to access their properties, named Traits.
+The curve class is parametrized by the type of the coordinates, named
+\c C, and the traits to use to access their properties, named \c Traits.
 
-The class claw::math::coordinate_2d<T> is a good candidate for C, but
-any class can be used as long as Traits provides the following
-implementation:
+The class claw::math::coordinate_2d is a good candidate for \c C, but
+any class can be used as long as Traits provides an implementation for
+the the following interface:
 
 \code
 struct traits_interface
@@ -121,15 +145,16 @@ struct traits_interface
 }; // struct traits_interface
 \endcode
 
-\subsection curve-control-point-class The control point class
+<!-- ----------------------------------------------------------------------- -->
+\section curve-control-point-class The control_point class
 
-The control point class is the aggregation of a coordinate through
-which the curve goes, and two coordinates defining the direction in
-which the curve "leaves" the point.
-
-The input and output coordinates are in the same domain than the
-curve's coordinate (i.e. they are not relative to the curve's
-coordinate).
+The \ref claw::math::curve::control_point "control point class" is the
+aggregation of a coordinate through which the curve goes (the position
+of the point), and two points defining the direction from which
+the curve respectively "enters and leaves" the point. Those input and
+output points are relative to the same origin than the curve's
+point (i.e. their coordinates are not relative to the curve's point
+itself).
 
 The interface of the class is as follows:
 \code
@@ -149,7 +174,7 @@ public:
 }; // class control_point
 \endcode
 
-Building a control point as follows
+\b Note: building a control point as follows
 \code
 coordinate_type c;
 control_point p( c )
@@ -160,39 +185,70 @@ coordinate_type c;
 control_point p( c, c, c )
 \endcode
 
-\section curve-access-control-point Accessing the control points of the curve
+<!-- ----------------------------------------------------------------------- -->
+\subsection curve-access-control-point Accessing the control points of a curve
 
-The control points of the curve can be accessed using iterators. The
-\code begin() \endcode and \code end() \endcode methods return
-an \c iterator repectively on the first control point of
-the curve or just past the last control point of the curve.
-
-If the call is done on a \c const \c curve then a
+The control points of the curve can be accessed using iterators
+implementing the concept of ForwardIterator and BackwardIterator. The
+\c begin() and \c end() methods return an \c iterator respectively on
+the first control point of the curve or just past the last control
+point of the curve. If the call is done on a \c const \c curve then a
 \c const_iterator is returned.
 
-The iterators implements the concept of ForwardIterator and
-BackwardIterator. 
-
-\section curve-add-control-point Adding a control point to a curve
+<!-- ----------------------------------------------------------------------- -->
+\subsection curve-add-control-point Adding a control point to a curve
 
 Several methods can be used to insert a control point in a curve:
- - \code void curve::push_back( const control_point& p ) \endcode will add
- the control point <i>p</i> at the end of the curve
-
- - \code void curve::push_front( const control_point& p ) \endcode will add
- the control point <i>p</i> at the beginning of the curve
-
  - \code void curve::insert( const iterator& pos, const control_point& p )
- \endcode will add the control point <i>p</i> before the control point
- represented by the iterator <i>pos</i>. If <i>pos == end()</i>, then
- <i>p</i> is inserted at the end of the curve.
+ \endcode will add the control point \c p before the control point
+ represented by the iterator \c pos. If \c pos == end(), then
+ \c p is inserted at the end of the curve,
+ - \code void curve::push_back( const control_point& p ) \endcode will add
+ the control point \c p at the end of the curve. This is
+ equivalent to \c curve::insert( curve::end(), p ),
+ - \code void curve::push_front( const control_point& p ) \endcode will add
+ the control point \c p at the beginning of the curve. This is
+ equivalent to \c curve::insert( curve::begin(), p ).
 
+\b Note: Please note that inserting a point in the curve between the beginning
+and the end of a section will invalidate the section.
 
+<!-- ----------------------------------------------------------------------- -->
+\section curve-resolved-point-class The resolved_point class
+
+The \ref claw::math::curve::section::resolved_point
+"resolved point class" represents the result of the computation of a
+point on the curve from an other parameter than <i>t</i>.
+
+The interface of the class is defined as follows:
+\code
+class resolved_point
+{
+public:
+  const coordinate_type& get_position() const;
+  const section& get_section() const;
+  double get_date() const;
+
+}; // class resolved_point
+\endcode
+
+The interface presents the following methods:
+ - \c get_position() returns the coordinates of the points on the
+   curve,
+ - \c get_section() returns the section on which the point has been
+   found,
+ - \c get_date() returns a value of <i>t</i> such that for a \c
+   resolved_point p, the following applies:
+\code
+p.get_section().get_point_at( p.get_date() ) == p.get_position()
+\endcode
+
+<!-- ----------------------------------------------------------------------- -->
 \section curve-section-class The section class
 
 A section describes a part of a curve represented by two successive
 control points. One can access the section starting from the point
-represented by an iterator <i>it</i> in the curve <i>c</i> using this
+represented by an iterator \c it in the curve \c c using this
 code:
 \code
 section s( c.get_section(it) );
@@ -205,9 +261,6 @@ class section
 public:
   typedef curve::const_iterator iterator_type;
 
-  // see below for the details
-  class resolved_point;
-
 public:
   section( const iterator_type& origin, const iterator_type& end );
 
@@ -216,16 +269,35 @@ public:
   std::vector<resolved_point>
   get_point_at_x( value_type x, bool off_domain = false  ) const;
 
-  const iterator_type& get_origin() const;
-
   bool empty() const;
 
 }; // class section
 \endcode
 
+\subsection curve-section-point-computation Computing the points of the curve
 
-\subsection curve-resolved-point-class The resolved_point class
+The main procedure to compute the coordinates of a point of the curve
+is to obtain a section of the curve and call
+\code
+section::get_point_at( double t )
+\endcode
+to get the coordinates of the point at a  given <i>t</i> on the
+section.
 
-The control_point class is defined as follows:
+If <i>t</i> is unknown, one can use the method
+\c get_point_at_x( value_type x, bool off_domain ) defined in claw::math::curve
+and claw::math::curve::section to obtain all the points of the curve
+or section having the given x-coordinate. If the argument
+\c off_domain is set to true, then the following applies:
+ - for \c section::get_point_at_x(), the resolved points found with a
+ date <i>t</i> such that <i>t < 0</i> or <i>1 < t</i> are kept,
+ - for \c curve::get_point_at_x(), the points found at a date
+   <i>t < 0</i> on the first section of the curve or at a date <i>t >
+   1</i> on the last section of the curve are kept.
+
+\subsection curve-section-properties-computation Other properties of the curve.
+
+The \c section::get_tangent_at( double t ) returns the tangent to the
+curve at a given <i>t</i> on a given section.
 
 */
