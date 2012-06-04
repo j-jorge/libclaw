@@ -11,7 +11,7 @@ Claw provides various containers for some special purposes.
 The \ref multi_type_map "Multi Type Map" is a map in which values of
 different types can be associated to the same key.
 
-\section container-avl A-V-L Binary Search Trees
+\section container-avl AVL Binary Search Trees
 
 See claw::avl.
 

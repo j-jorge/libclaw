@@ -2,7 +2,9 @@
 /*! \page curves Bézier curves
 
 The claw::math::curve class is a C++ implementation of the
-parametrized curves known as Bézier curves.
+parametrized curves known as
+<a href="http://en.wikipedia.org/wiki/B%C3%A9zier_curve">Bézier
+curves</a>.
 
 <!--
   Table of content generated with:
@@ -30,11 +32,11 @@ direction of the curve between <i>P<sub>0</sub></i> and
 <i>P<sub>n</sub></i>. The points of the curve are then defined for a
 given fraction <i>t ∈ </i>[0, 1] of the length of the curve by the
 following equations:
-\f[ \left\{ \begin{array}{l}
-x(t) = \displaystyle\sum_0^n P_it^i(1-t)^{n-i} \\
-y(t) = \displaystyle\sum_0^n P_it^i(1-t)^{n-i}
-\end{array}
-\right. \quad t \in [0, 1] \f]
+\f[ B(t) = \sum_{j=0}^n \left( \begin{array}{c}
+n \\
+j
+\end{array}\right)
+P_jt^j(1-t)^{n-j} \quad t \in [0, 1] \f]
 
 A \ref curve-curve-class "curve" in Claw is defined by a sequence of
 points <i>p<sub>j</sub></i> through which the curve goes. A \ref
@@ -44,7 +46,11 @@ The equations of Bézier, restricted to the cubic case (<i>n=3</i>),
 are used to describe the shape of each section. This shape is
 controlled by the output direction <i>o<sub>j</sub></i> of its first
 point and the input direction <i>i<sub>j+1</sub></i> of its last
-point.
+point. The equation of a section <i>s<sub>j</sub></i> is written as
+follows:
+\f[ B_j(t) = (1-t)^3p_j + 3(1-t)^2to_j + 3(1-t)t^2i_{j+1} +
+t^3p_{j+1} \quad t \in [0, 1] \f]
+
 One can then build complex curves by concatenating several sections.
 
 The library provides the following functionalities:
