@@ -31,6 +31,57 @@
 #include <algorithm>
 #include <boost/bind.hpp>
 
+/**
+ * \brief Swap the values of two double variables.
+ * \param a The reference to the first value to swap.
+ * \param b The reference to the second value to swap.
+ *
+ * On some configurations the compiler complains about not finding
+ * std::swap<double> in instructions like:
+ *
+ * \code boost::bind( &std::swap<double>, boost::ref(val), _1 ); \endcode
+ *
+ * As it was used in
+ *   claw::tween::single_tweener::single_tweener
+ *     (double&, double, double, easing_function)
+ *
+ * The workaround is to use this local definition of the swap function.
+ */
+static void local_swap( double& a, double& b )
+{
+  const double t(a);
+  a = b;
+  b = t;
+} // local_swap()
+
+#ifndef CLAW_TWEENER_DEFINE_BOOST_THROW_EXCEPTION
+
+#ifndef WORKAROUND_BOOST_THROW_EXCEPTION
+#define WORKAROUND_BOOST_THROW_EXCEPTION
+
+#include "boost/throw_exception.hpp"
+
+/**
+ * \brief Redefinition of some boost elements, required on some compilers.
+ */
+namespace boost {
+
+  /**
+   * \brief boost::throw_exception definition, Needed on XCode compiler.
+   * This implementation does nothing.
+   * \param exc The exception to throw.
+   *
+   * \author Anton Rutkevich <anton.rutkevich@boolbalabs.com>
+   */
+  void throw_exception( std::exception const& exc ) {
+    // nothing
+  } // throw_exception()
+
+} // namespace boost
+
+#endif // WORKAROUND_BOOST_THROW_EXCEPTION
+#endif // ifdef CLAW_TWEENER_DEFINE_BOOST_THROW_EXCEPTION
+
 /*----------------------------------------------------------------------------*/
 /**
  * \brief Default constructor.
@@ -71,7 +122,7 @@ claw::tween::single_tweener::single_tweener
 ( double& val, double end, double duration, easing_function e )
   : m_init(val), m_end(end), m_date(0), m_duration(duration), m_easing(e)
 {
-  m_callback = boost::bind( &std::swap<double>, boost::ref(val), _1 );
+  m_callback = boost::bind( &local_swap, boost::ref(val), _1 );
 } // single_tweener::single_tweener()
 
 /*----------------------------------------------------------------------------*/
