@@ -33,6 +33,7 @@
 
 namespace claw
 {
+  /** \brief The default log system provided by claw. */
   log_system logger;
 } // namespace claw
 
