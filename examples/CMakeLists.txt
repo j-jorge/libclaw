@@ -8,6 +8,7 @@ subdirs(
   avl
   compress
   config_file
+  curve
   dynamic_library
   graph
   game_ai

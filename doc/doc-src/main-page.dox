@@ -1,8 +1,10 @@
+/* -*- coding: utf-8 -*- */
 /*! \mainpage
 
-Claw is a generalist library written in C++ and providing structures
-and algorithms, like containers, string algorithms, \ref tweeners
-"tweeners" and more.
+Claw is a generalist library written in C++ and providing various
+structures and algorithms, like \ref containers "containers", string
+algorithms, \ref tweeners "tweeners", \ref curves "Bézier curves" and
+more.
 
  - \ref main-presentation
  - \ref main-download

@@ -32,7 +32,18 @@
 
 #include <libintl.h>
 
+/**
+ * \brief Call gettext on the default text domain used by Claw.
+ * \param s The string to translate.
+ */
 #define claw_gettext(s) dgettext( "libclaw", (s) )
+
+/**
+ * \brief Call ngettext on the default text domain used by Claw.
+ * \param s The string to translate by default.
+ * \param p The plural version of s.
+ * \param n The number thar triggers the choice of \a s or \a p.
+ */
 #define claw_ngettext(s, p, n) dngettext( "libclaw", (s), (p), (n) )
 
 #endif // __CLAW_CLAW_GETTEXT_HPP__

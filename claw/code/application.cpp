@@ -34,7 +34,16 @@
 #include <claw/log_stream_concise.hpp>
 #include <claw/claw_gettext.hpp>
 
+/**
+ * \brief Build a char[] string representing an expression.
+ * \param e The content of the string.
+ */
 #define CLAW_MK_STR_(e) #e
+
+/**
+ * \brief Build a char[] string representing an expression.
+ * \param e The content of the string.
+ */
 #define CLAW_MK_STR(e) CLAW_MK_STR_(e)
 
 /*----------------------------------------------------------------------------*/

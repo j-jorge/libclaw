@@ -129,7 +129,9 @@ namespace claw
 
   }; // class dynamic_library_traits_unix
 
+  /** \brief The traits to access the dynamic libraries in Unix system. */
   typedef dynamic_library_traits_unix dynamic_library_traits;
+
 } // namespace claw
 
 #endif // __CLAW_DYNAMIC_LIBRARY_TRAITS_UNIX_HPP__

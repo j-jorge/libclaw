@@ -101,8 +101,8 @@ end of the interpolation. Then the third parameter is the total
 duration of the interpolation. The unit can be whatever the user wants
 (seconds, milliseconds, …) as long as this is the same unit used for
 the updates. Finally, the fourth parameter is the function used to
-compute the intermediate values. See \ref tweener-easing for details
-about those functions.
+compute the intermediate values. See \ref tweener-easing-functions for
+details about those functions.
 
 The next part of the example updates the tweeners until the end value
 is reached.
@@ -264,6 +264,9 @@ The tweener interface, as described below, is quite simple:
 class tweener
 {
 public:
+  typedef boost::function<void()> finish_callback();
+
+public:
   tweener();
   tweener( const tweener& that );
 
@@ -273,12 +276,14 @@ public:
 
   bool is_finished() const;
   double update( double dt );
+
+  void on_finished( finish_callback f );
 };
 \endcode
 
 The tweener library use two functions to manage the tweeners. First,
 the <tt>bool is_finished() const</tt> must return true if and only if
-the final values has been reached. Then,
+the final value has been reached. Then,
 <tt>double update(double)</tt> is used to update the intermediate
 values, where the single argument is the amount of time since the last
 update or since the construction of the tweener. This function returns
@@ -287,6 +292,9 @@ is at 1 time unit from the end of the interpolation and
 <tt>update(1.5)</tt> is called on this tweener, then 0.5 is
 returned. Indeed, only 1 of the 1.5 available units have been used to
 reach the end of the interpolation.
+
+When a tweener is finished, all the functions passed to
+<tt>void on_finished( finish_callback )</tt> are called in sequence.
 
 \subsection tweener-single_tweener claw::tween::single_tweener
 
@@ -318,6 +326,8 @@ public:
 
   bool is_finished() const;
   double update( double dt );
+
+  void on_finished( finish_callback f );
 };
 \endcode
 
@@ -339,8 +349,8 @@ this is the same unit used for the updates. The fourth argument is the
 callback function called at each update. His signature must be
 <tt>void (double)</tt>, where the argument receive the current
 intermediate value. Finally, the fifth parameter is the function used
-to compute the intermediate values. See \ref tweener-easing for
-details about this topic.
+to compute the intermediate values. See \ref tweener-easing-functions
+for details about this topic.
 
 In the situation where the interpolation is done on a known variable,
 one would have to provide a callback function to assign the
@@ -384,6 +394,10 @@ single_tweener create_tweener()
 }
 \endcode
 
+The <tt>void on_finished()</tt> function allows to insert a callback
+that will be called when the tweener finishes, during a call to
+<tt>double update(double)</tt>.
+
 \subsection tweener-tweener_group claw::tween::tweener_group
 
 Once that single_tweener is understood, the other tweener classes are
@@ -401,6 +415,8 @@ public:
 
   bool is_finished() const;
   double update( double dt );
+
+  void on_finished( finish_callback f );
 };
 \endcode
 
@@ -411,6 +427,10 @@ allowing to play several tweeners in parallel.
 The <tt>bool is_finished()</tt> function returns true when all the
 tweeners of the group are finished. Also, tweeners can be inserted in
 a \c tweener_group at any time.
+
+The <tt>void on_finished()</tt> function allows to insert a callback
+that will be called when the last tweener in the group finishes,
+during a call to <tt>double update(double)</tt>.
 
 \subsection tweener-tweener_sequence claw::tween::tweener_sequence
 
@@ -428,6 +448,8 @@ public:
 
   bool is_finished() const;
   double update( double dt );
+
+  void on_finished( finish_callback f );
 };
 \endcode
 
@@ -437,8 +459,12 @@ tweener, splitting the argument value among several tweeners if
 needed.
 
 The <tt>bool is_finished()</tt> function returns true when all the
-tweeners of the group are finished. Also, tweeners can be inserted in
+tweeners of the sequence are finished. Also, tweeners can be inserted in
 a \c tweener_sequence at any time.
+
+The <tt>void on_finished()</tt> function allows to insert a callback
+that will be called when the last tweener in the sequence finishes,
+during a call to <tt>double update(double)</tt>.
 
 \section tweener-easing-functions Easing functions
 
