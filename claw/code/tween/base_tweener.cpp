@@ -93,7 +93,9 @@ void claw::tween::base_tweener::on_finished( finish_callback f )
  */
 void claw::tween::base_tweener::notify_finished() const
 {
-  for ( std::list<finish_callback>::const_iterator it=m_on_finished.begin();
-        it!=m_on_finished.end(); ++it )
+  std::list<finish_callback> callbacks(m_on_finished);
+
+  for ( std::list<finish_callback>::const_iterator it=callbacks.begin();
+        it!=callbacks.end(); ++it )
     (*it)();
 } // base_tweener::notify_finished()
