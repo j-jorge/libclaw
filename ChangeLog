@@ -1,3 +1,21 @@
+2011-07-05 Julien Jorge <julien.jorge@gamned.org>
+
+	* version 1.7.1
+
+	* claw
+	- Fix compilation issues with gcc 4.7
+
+	* claw::math
+	- Add a method to compute the smallest bounding box of two
+	  rectangles.
+	- Add a curve class to manipulate Bézier curves.
+
+	* claw::tween
+	- The tweeners can receive callbacks that will be executed when the
+	  tweener is finished.
+	- Adds some workarounds to compile the tweeners with XCode. Thanks
+	  to Anton Rutkevich.
+
 2011-07-24 Julien Jorge <julien.jorge@gamned.org>
 
 	* version 1.7.0
