@@ -93,7 +93,10 @@ void claw::tween::base_tweener::on_finished( finish_callback f )
  */
 void claw::tween::base_tweener::notify_finished() const
 {
-  std::list<finish_callback> callbacks(m_on_finished);
+  // If one of the callbacks deletes the tweener, then m_on_finished will not be
+  // available. Since we still want to execute all the callbacks, we iterate on
+  // a copy of it.
+  const std::list<finish_callback> callbacks(m_on_finished);
 
   for ( std::list<finish_callback>::const_iterator it=callbacks.begin();
         it!=callbacks.end(); ++it )
