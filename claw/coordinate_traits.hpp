@@ -31,6 +31,7 @@
 #define __CLAW_MATH_COORDINATE_TRAITS_HPP__
 
 #include <claw/coordinate_2d.hpp>
+#include <claw/vector_2d.hpp>
 
 namespace claw
 {

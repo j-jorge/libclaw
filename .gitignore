@@ -16,6 +16,7 @@ claw/version.hpp
 examples/*/ex-*
 examples/*/*/ex-*
 examples/graph/mk_test
+examples/curve/output.png
 
 # Temporary files
 *~
