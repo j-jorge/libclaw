@@ -32,6 +32,7 @@
 
 #include <claw/image.hpp>
 #include <png.h>
+#include <zlib.h>
 #include <setjmp.h>
 #include <iostream>
 #include <string>
