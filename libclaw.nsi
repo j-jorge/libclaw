@@ -16,6 +16,8 @@ InstallDirRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\libcl
 
 XPStyle on
 
+SetCompressor /SOLID lzma
+
 ;--------------------------------
 
 Page license
