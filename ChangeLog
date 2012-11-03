@@ -1,4 +1,14 @@
-2011-07-05 Julien Jorge <julien.jorge@gamned.org>
+2012-11-03 Julien Jorge <julien.jorge@gamned.org>
+
+	* version 1.7.2
+
+	* claw
+	- Add a script to ease the compilation for Windows using Wine.
+	
+	* claw::graphic:png
+	- Add missing #include <png.h>, thanks Tibor Bamhor.
+
+2012-07-05 Julien Jorge <julien.jorge@gamned.org>
 
 	* version 1.7.1
 
