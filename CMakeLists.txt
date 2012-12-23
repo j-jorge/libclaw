@@ -85,7 +85,7 @@ set( CLAW_APPLICATION_SOURCES
   ${CLAW_CODE_DIR}arguments_table.cpp
 )
 add_library( claw_application SHARED ${CLAW_APPLICATION_SOURCES} )
-add_library( claw_application-static STATIC ${CLAW_APPLICATION_SOURCES} )
+add_library( claw_application-static ${CLAW_APPLICATION_SOURCES} )
 target_link_libraries( claw_application claw_logger )
 
 if( NOT WIN32 )
@@ -264,6 +264,13 @@ foreach( lib ${CLAW_LIBRARIES} )
     VERSION ${CLAW_VERSION}
     SOVERSION ${CLAW_VERSION_MAJOR}
   )
+
+  set_target_properties(
+    ${lib}-static
+    PROPERTIES OUTPUT_NAME
+    ${lib}
+    CLEAN_DIRECT_OUTPUT 1
+    )
 
   install( TARGETS ${lib} DESTINATION ${CLAW_INSTALLDIR_LIB}  )
   install( TARGETS ${lib}-static DESTINATION ${CLAW_INSTALLDIR_LIB}  )
