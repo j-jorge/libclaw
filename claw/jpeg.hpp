@@ -34,6 +34,7 @@
 #include <setjmp.h>
 #include <iostream>
 #include <string>
+#include <cstdio>
 
 extern "C"
 {
