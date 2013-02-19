@@ -84,3 +84,13 @@ double claw::tween::tweener_sequence::do_update( double dt )
 
   return result;
 } // tweener_sequence::do_update()
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Tells if there is nothing in this sequence.
+ */
+bool claw::tween::tweener_sequence::empty() const
+{
+  return m_tweeners.empty();
+} // tweener_sequence::empty()
+

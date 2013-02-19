@@ -28,6 +28,7 @@
  */
 #include <claw/tween/easing/easing_sine.hpp>
 
+#include <boost/math/constants/constants.hpp>
 #include <cmath>
 
 /**
@@ -37,9 +38,6 @@
  */
 double claw::tween::easing_sine_func( double t )
 {
-#ifdef M_PI
-  return 1 - std::cos(t * M_PI / 2);
-#else
-  return 1 - std::cos(t * std::acos(-1) / 2);
-#endif
+  const double pi( boost::math::constants::pi<double>() );
+  return 1 - std::cos(t * pi / 2);
 } // easing_sine_func()

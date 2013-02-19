@@ -52,6 +52,7 @@ namespace claw
       void insert( const tweener& t );
 
       void clear();
+      bool empty() const;
 
     private:
       tweener_group* do_clone() const;

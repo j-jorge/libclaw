@@ -36,11 +36,6 @@
 void claw::tween::tweener_group::insert( const tweener& t )
 {
   m_tweeners.push_back(t);
-
-  m_tweeners.back().update(0); // force the initial position
-
-  if ( m_tweeners.back().is_finished() )
-    m_tweeners.pop_back();
 } // tweener_group::insert()
 
 /*----------------------------------------------------------------------------*/
@@ -99,3 +94,12 @@ double claw::tween::tweener_group::do_update( double dt )
 
   return result;
 } // tweener_group::do_update()
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Tells if there is nothing in this group.
+ */
+bool claw::tween::tweener_group::empty() const
+{
+  return m_tweeners.empty();
+} // tweener_group::empty()

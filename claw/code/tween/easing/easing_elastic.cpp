@@ -28,6 +28,7 @@
  */
 #include <claw/tween/easing/easing_elastic.hpp>
 
+#include <boost/math/constants/constants.hpp>
 #include <cmath>
 
 /**
@@ -37,12 +38,9 @@
  */
 double claw::tween::easing_elastic_func( double t )
 {
-#ifdef M_PI
-  const double pi = M_PI;
-#else
-  const double pi = std::acos(-1);
-#endif
+  const double pi( boost::math::constants::pi<double>() );
   const double v(t-1);
   const double p(0.3);
+
   return -std::pow(2, 10 * v) * std::sin( (v - p / 4) * 2 * pi / p );
 } // easing_elastic_func()
