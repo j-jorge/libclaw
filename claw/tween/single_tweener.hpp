@@ -64,11 +64,19 @@ namespace claw
       single_tweener
       ( double& val, double end, double duration, easing_function e );
 
+      double get_init() const;
       void set_init( double v );
+
+      double get_end() const;
       void set_end( double v );
+
+      double get_duration() const;
       void set_duration( double v );
+
       void set_callback( update_function f );
       void set_easing( easing_function f );
+
+      double get_value() const;
 
     private:
       single_tweener* do_clone() const;

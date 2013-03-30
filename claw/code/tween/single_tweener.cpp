@@ -127,7 +127,16 @@ claw::tween::single_tweener::single_tweener
 
 /*----------------------------------------------------------------------------*/
 /**
- * \brief Set the initial value.
+ * \brief Gets the initial value.
+ */
+double claw::tween::single_tweener::get_init() const
+{
+  return m_init;
+} // single_tweener::get_init()
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Sets the initial value.
  * \param v The value.
  */
 void claw::tween::single_tweener::set_init( double v )
@@ -137,7 +146,16 @@ void claw::tween::single_tweener::set_init( double v )
 
 /*----------------------------------------------------------------------------*/
 /**
- * \brief Set the final value.
+ * \brief Gets the final value.
+ */
+double claw::tween::single_tweener::get_end() const
+{
+  return m_end;
+} // single_tweener::get_end()
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Sets the final value.
  * \param v The value.
  */
 void claw::tween::single_tweener::set_end( double v )
@@ -147,7 +165,16 @@ void claw::tween::single_tweener::set_end( double v )
 
 /*----------------------------------------------------------------------------*/
 /**
- * \brief Set the total duration.
+ * \brief Gets the total duration.
+ */
+double claw::tween::single_tweener::get_duration() const
+{
+  return m_duration;
+} // single_tweener::get_duration()
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Sets the total duration.
  * \param v The value.
  */
 void claw::tween::single_tweener::set_duration( double v )
@@ -174,6 +201,16 @@ void claw::tween::single_tweener::set_easing( easing_function f )
 {
   m_easing = f;
 } // single_tweener::set_easing()
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Gets the current value of the tweener.
+ */
+double claw::tween::single_tweener::get_value() const
+{
+  const double coeff = m_easing( m_date / m_duration );
+  return m_init + coeff * (m_end - m_init);
+} // single_tweener::get_value()
 
 /*----------------------------------------------------------------------------*/
 /**
@@ -204,8 +241,7 @@ double claw::tween::single_tweener::do_update( double dt )
   const double result = dt - t;
   m_date += t;
 
-  const double coeff = m_easing( m_date / m_duration );
-  const double val = m_init + coeff * (m_end - m_init);
+  const double val( get_value() );
 
   m_callback(val);
 
