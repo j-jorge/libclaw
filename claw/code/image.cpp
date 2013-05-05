@@ -194,7 +194,7 @@ claw::graphic::image::const_iterator claw::graphic::image::begin() const
  */
 claw::graphic::image::const_iterator claw::graphic::image::end() const
 {
-  return const_iterator(*this, width(), height());
+  return const_iterator(*this, width(), height()-1);
 } // image::end()
 
 /*----------------------------------------------------------------------------*/
