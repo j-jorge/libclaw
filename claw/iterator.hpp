@@ -284,6 +284,11 @@ namespace claw
     bool operator>( const self_type& that ) const { return m_it > that.m_it; }
     bool operator>=( const self_type& that ) const { return m_it >= that.m_it; }
 
+    difference_type operator-( const self_type& that ) const
+    {
+      return m_it - that.m_it;
+    }
+
     self_type& operator+=(int n)
     {
       m_it += n;
