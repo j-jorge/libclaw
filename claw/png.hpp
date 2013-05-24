@@ -90,7 +90,8 @@ namespace claw
         void read_interlaced_image( png_structp png_ptr, png_infop info_ptr,
                                     unsigned int passes );
 
-        void copy_pixel_line( png_bytep data, unsigned int y );
+        void copy_pixel_line
+        ( png_byte color_type, png_bytep data, unsigned int y );
 
         void create_read_structures( png_structp& png_ptr,
                                      png_infop& info_ptr ) const;
