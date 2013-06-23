@@ -238,19 +238,20 @@ void claw::graphic::image::merge
 
           for( ; first!=last; ++first, ++dest )
             {
-              const double src_alpha(first->components.alpha);
-              const double dest_alpha(dest->components.alpha);
+              const double src_alpha( first->components.alpha );
+              const double dest_alpha
+                ( dest->components.alpha * (max_comp - src_alpha) );
 
-              double red =
-                (double)first->components.red
-                + dest_alpha * (double)dest->components.red / max_comp;
-              double green =
-                (double)first->components.green
-                + dest_alpha * (double)dest->components.green / max_comp;
-              double blue =
-                (double)first->components.blue
-                  + dest_alpha * (double)dest->components.blue / max_comp;
-              double alpha = src_alpha + (max_comp - dest_alpha) / max_comp;
+              const double red =
+                (double)first->components.red * src_alpha
+                + (double)dest->components.red * dest_alpha;
+              const double green =
+                (double)first->components.green * src_alpha
+                + (double)dest->components.green * dest_alpha;
+              const double blue =
+                (double)first->components.blue * src_alpha
+                + (double)dest->components.blue * dest_alpha;
+              const double alpha = src_alpha + dest_alpha;
 
               dest->components.red = std::min(red, max_comp);
               dest->components.green = std::min(green, max_comp);
