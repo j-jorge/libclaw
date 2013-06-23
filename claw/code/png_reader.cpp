@@ -155,19 +155,24 @@ void claw::graphic::png::reader::read_from_file( std::istream& f )
   png_set_read_fn( png_ptr, (void *)&infile,
                    claw__graphic__png__source_manager__read );
 
+  png_read_info(png_ptr, info_ptr);
+
   png_set_strip_16(png_ptr);
   png_set_expand_gray_1_2_4_to_8(png_ptr);
   png_set_packing(png_ptr);
 
+  png_set_tRNS_to_alpha(png_ptr);
+
   // transform palette index into RGB value
   png_set_palette_to_rgb(png_ptr);
-
+  
   // add an alpha value if none
   png_set_filler( png_ptr,
                   std::numeric_limits<rgba_pixel_8::component_type>::max(),
                   PNG_FILLER_AFTER );
 
-  png_read_info(png_ptr, info_ptr);
+  png_read_update_info(png_ptr, info_ptr);
+
   read_image( png_ptr, info_ptr );
       
   png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
@@ -232,13 +237,14 @@ void claw::graphic::png::reader::read_sequential_image
 
   png_bytep data =
     (png_bytep)png_malloc( png_ptr, s_rgba_pixel_size * m_image.width() );
+  const png_byte color_type( png_get_color_type(png_ptr, info_ptr) );
 
   try
     {
       for (unsigned int y=0; y!=m_image.height(); ++y)
         {
           png_read_row(png_ptr, data, NULL);
-          copy_pixel_line( data, y );
+          copy_pixel_line( color_type, data, y );
         }
     }
   catch(...)
@@ -268,6 +274,7 @@ void claw::graphic::png::reader::read_interlaced_image
   png_bytepp data =
     (png_bytepp)png_malloc( png_ptr, sizeof(png_bytep) * m_image.height() );
   unsigned int i=0;
+  const png_byte color_type( png_get_color_type(png_ptr, info_ptr) );
 
   try
     {
@@ -278,14 +285,14 @@ void claw::graphic::png::reader::read_interlaced_image
           if (!data[i])
             throw std::bad_alloc();
 
-          copy_pixel_line( data[i], i );
+          copy_pixel_line( color_type, data[i], i );
         }
 
       for (unsigned int p=0; p!=passes; ++p)
         png_read_rows( png_ptr, data, NULL, m_image.height() );
 
       for (unsigned int y=0; y!=m_image.height(); ++y)
-        copy_pixel_line( data[y], y );
+        copy_pixel_line( color_type, data[y], y );
     }
   catch(...)
     {
@@ -305,23 +312,35 @@ void claw::graphic::png::reader::read_interlaced_image
 /*----------------------------------------------------------------------------*/
 /**
  * \brief Copy the pixels taken from the PNG to the image.
+ * \param color_type The structure of the colors in the data.
  * \param data the pixels from the PNG image.
  * \param y Index of the line of the image in which we copy the pixels.
  */
 void
-claw::graphic::png::reader::copy_pixel_line( png_bytep data, unsigned int y )
+claw::graphic::png::reader::copy_pixel_line
+( png_byte color_type, png_bytep data, unsigned int y )
 {
   CLAW_PRECOND( data );
   CLAW_PRECOND( y < m_image.height() );
 
-  // four bytes for each pixel in the line
-  for (unsigned int x=0; x!=m_image.width(); ++x, data+=s_rgba_pixel_size)
-    {
-      m_image[y][x].components.red   = data[0];
-      m_image[y][x].components.green = data[1];
-      m_image[y][x].components.blue  = data[2];
-      m_image[y][x].components.alpha = data[3];
-    }
+  if ( color_type == PNG_COLOR_TYPE_GRAY_ALPHA ) 
+    // There is two bytes for each pixel in the line: the color and the opacity.
+    for (unsigned int x=0; x!=m_image.width(); ++x, data += 2)
+      {
+        m_image[y][x].components.red   = data[0];
+        m_image[y][x].components.green = data[0];
+        m_image[y][x].components.blue  = data[0];
+        m_image[y][x].components.alpha = data[1];
+      }
+  else
+    // There is four bytes for each pixel in the line.
+    for (unsigned int x=0; x!=m_image.width(); ++x, data+=s_rgba_pixel_size)
+      {
+        m_image[y][x].components.red   = data[0];
+        m_image[y][x].components.green = data[1];
+        m_image[y][x].components.blue  = data[2];
+        m_image[y][x].components.alpha = data[3];
+      }
 } // png::reader::copy_pixel_line()
 
 /*----------------------------------------------------------------------------*/
