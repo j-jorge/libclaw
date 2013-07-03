@@ -34,6 +34,13 @@
 [ -z "$WIN_BOOST_INCLUDE_DIR" ] \
     && WIN_BOOST_INCLUDE_DIR="$WIN_BOOST_DIR"
 
+# Programs
+[ -z "$GETTEXT_MSGMERGE_PATH" ] \
+    && GETTEXT_MSGMERGE_PATH="$WIN_GNU_BIN_DIR/msgmerge.exe"
+
+[ -z "$GETTEXT_MSGFMT_PATH" ] \
+    && GETTEXT_MSGFMT_PATH="$WIN_GNU_BIN_DIR/msgfmt.exe"
+
 # Compilation flags
 [ -z "$BUILD_TYPE" ] && BUILD_TYPE=release
 
@@ -50,6 +57,8 @@ wine C:/Program\ Files/CMake\ 2.8/bin/cmake.exe -G "MinGW Makefiles" . \
     -DPNG_PNG_INCLUDE_DIR:PATH="$WIN_PNG_INCLUDE_DIR" \
     -DPNG_LIBRARY:FILEPATH="$WIN_PNG_LIBRARY_PATH" \
     -DBoost_INCLUDE_DIR:PATH="$WIN_BOOST_INCLUDE_DIR" \
+    -DGETTEXT_MSGMERGE_EXECUTABLE:FILEPATH="$GETTEXT_MSGMERGE_PATH" \
+    -DGETTEXT_MSGFMT_EXECUTABLE:FILEPATH="$GETTEXT_MSGFMT_PATH" \
     -DCMAKE_SHARED_LINKER_FLAGS='-Wl,--enable-auto-import,--enable-stdcall-fixup' \
     -DCMAKE_EXE_LINKER_FLAGS='-Wl,--enable-auto-import,--enable-stdcall-fixup' \
     -DCMAKE_INSTALL_PREFIX="$INSTALL_PREFIX"
