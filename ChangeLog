@@ -1,4 +1,19 @@
-2013-03-143 Julien Jorge <julien.jorge@gamned.org>
+2013-07-03 Julien Jorge <julien.jorge@gamned.org>
+
+	* version 1.7.4
+
+	* claw
+	- Installs a version file for CMake.
+
+	* claw::graphic
+	- Fixes the end iterator on the image instances.
+	- Fixes the image merge algorithm.
+	- Fixes the loading of grayscale PNGs with an alpha channel.
+
+	* claw::tween
+	- Adds the getters on single_tweener.
+
+2013-03-14 Julien Jorge <julien.jorge@gamned.org>
 
 	* version 1.7.3
 
