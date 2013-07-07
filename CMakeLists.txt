@@ -18,15 +18,6 @@ set( CLAW_VERSION
 
 set(CLAW_REVISION_NUMBER 0)
 
-find_file(SVN_ENTRIES ".svn/entries" PATH ${CMAKE_CURRENT_SOURCE_DIR})
-if(SVN_ENTRIES)
-  find_package(Subversion)
-  if(Subversion_FOUND)
-    Subversion_WC_INFO(${CMAKE_CURRENT_SOURCE_DIR} INFO)
-    set(CLAW_REVISION_NUMBER ${INFO_WC_REVISION})
-  endif(Subversion_FOUND)
-endif(SVN_ENTRIES)
-
 set( CLAW_CODE_DIR claw/code/ )
 set( CLAW_INCLUDE_DIRECTORY "${CMAKE_INSTALL_PREFIX}/include/" )
 set( CLAW_INSTALLDIR_SOURCE include/claw/ )
