@@ -1472,8 +1472,8 @@ template<class K, class Comp>
 void claw::avl_base<K,Comp>::rotate_right( avl_node_ptr& node )
 {
   avl_node_ptr p;
-  char old_node_balance;
-  char old_subtree_balance;
+  signed char old_node_balance;
+  signed char old_subtree_balance;
 
   assert( node != NULL );
   assert( node->left != NULL );
@@ -1533,8 +1533,8 @@ template<class K, class Comp>
 void claw::avl_base<K,Comp>::rotate_left( avl_node_ptr& node )
 {
   avl_node_ptr p;
-  char old_node_balance;
-  char old_subtree_balance;
+  signed char old_node_balance;
+  signed char old_subtree_balance;
 
   assert( node != NULL );
   assert( node->right != NULL );

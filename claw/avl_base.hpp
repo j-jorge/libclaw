@@ -112,7 +112,7 @@ namespace claw
        *  Equals to the difference between left child depth and right child 
        *  depth.
        */
-      char balance;
+      signed char balance;
 
       /** \brief Father of the node. Null if this node is root */
       avl_node *father;
