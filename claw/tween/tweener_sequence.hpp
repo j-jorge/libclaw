@@ -32,7 +32,7 @@
 #include <claw/tween/base_tweener.hpp>
 #include <claw/tween/tweener.hpp>
 
-#include <list>
+#include <vector>
 
 namespace claw
 {
@@ -64,7 +64,7 @@ namespace claw
 
     private:
       /** \brief The tweeners. */
-      std::list<tweener> m_tweeners;
+      std::vector<tweener> m_tweeners;
       
     }; // class tweener_sequence
 

@@ -72,7 +72,7 @@ bool claw::tween::tweener_group::do_is_finished() const
  */
 double claw::tween::tweener_group::do_update( double dt )
 {
-  typedef std::list<tweener>::iterator iterator_type;
+  typedef std::vector<tweener>::iterator iterator_type;
   double result(dt);
 
   iterator_type it = m_tweeners.begin();
@@ -83,11 +83,7 @@ double claw::tween::tweener_group::do_update( double dt )
       result = std::min(result, r);
 
       if ( it->is_finished() )
-        {
-          const iterator_type tmp(it);
-          ++it;
-          m_tweeners.erase(tmp);
-        }
+        it = m_tweeners.erase(it);
       else
         ++it;
     }

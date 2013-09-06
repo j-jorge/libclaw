@@ -79,7 +79,7 @@ double claw::tween::tweener_sequence::do_update( double dt )
       result = m_tweeners.front().update(result);
 
       if ( m_tweeners.front().is_finished() )
-        m_tweeners.pop_front();
+        m_tweeners.erase( m_tweeners.begin() );
     }
 
   return result;
