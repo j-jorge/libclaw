@@ -37,6 +37,8 @@
 #include <claw/log_level.hpp>
 #include <claw/log_stream.hpp>
 
+#include <boost/thread/mutex.hpp>
+
 #ifndef CLAW_LOGGER_EXPORT
 #  ifdef CLAW_LOGGER_NO_EXPORT
 #    define CLAW_LOGGER_EXPORT
@@ -94,6 +96,13 @@ namespace claw
     CLAW_LOGGER_EXPORT log_system& operator<<( log_system& (*pf)(log_system&) );
 
   private:
+    void print( const std::string& s );
+
+  private:
+    /** \brief The mutex used to avoid changing the content of the logs 
+        by two sources simultaneously. */
+    boost::mutex m_mutex;
+
     /** \brief The level of log. Messages are ignored if their level is greater
         than this level. */
     int m_log_level;

@@ -38,15 +38,14 @@
 template<class T>
 claw::log_system& claw::log_system::operator<<( const T& t )
 {
+  boost::mutex::scoped_lock lock( m_mutex );
+
   if (m_message_level <= m_log_level)
     {
       std::ostringstream oss;
       oss << t;
 
-      typename stream_list_type::iterator it;
-
-      for (it = m_stream.begin(); it!=m_stream.end(); ++it)
-	(*it)->write(oss.str());
+      print( oss.str() );
     }
 
   return *this;

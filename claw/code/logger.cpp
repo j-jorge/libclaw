@@ -64,6 +64,8 @@ claw::log_system::~log_system()
  */
 void claw::log_system::clear()
 {
+  boost::mutex::scoped_lock lock( m_mutex );
+
   stream_list_type::iterator it;
 
   for ( it=m_stream.begin(); it!=m_stream.end(); ++it )
@@ -79,6 +81,8 @@ void claw::log_system::clear()
  */
 void claw::log_system::merge( stream_type* s )
 {
+  boost::mutex::scoped_lock lock( m_mutex );
+
   m_stream.push_front(s);
 } // log_system::merge()
 
@@ -90,6 +94,8 @@ void claw::log_system::merge( stream_type* s )
  */
 void claw::log_system::remove( const stream_type* s )
 {
+  boost::mutex::scoped_lock lock( m_mutex );
+
   stream_list_type::iterator it =
     std::find(m_stream.begin(), m_stream.end(), s);
 
@@ -105,6 +111,9 @@ void claw::log_system::remove( const stream_type* s )
 void claw::log_system::set( stream_type* s )
 {
   clear();
+
+  boost::mutex::scoped_lock lock( m_mutex );
+
   m_stream.push_front(s);
 } // log_system::set()
 
@@ -115,6 +124,8 @@ void claw::log_system::set( stream_type* s )
  */
 void claw::log_system::set_level( int lvl )
 {
+  boost::mutex::scoped_lock lock( m_mutex );
+
   m_log_level = lvl;
 } // log_system::set_level()
 
@@ -125,6 +136,8 @@ void claw::log_system::set_level( int lvl )
  */
 void claw::log_system::set_level( const log_level& lvl )
 {
+  boost::mutex::scoped_lock lock( m_mutex );
+
   m_log_level = lvl.get();
 } // log_system::set_level()
 
@@ -134,6 +147,8 @@ void claw::log_system::set_level( const log_level& lvl )
  */
 void claw::log_system::flush()
 {
+  boost::mutex::scoped_lock lock( m_mutex );
+
   if (m_message_level <= m_log_level)
     {
       stream_list_type::iterator it;
@@ -150,10 +165,12 @@ void claw::log_system::flush()
  */
 claw::log_system& claw::log_system::operator<<( const log_level& that )
 {
+  boost::mutex::scoped_lock lock( m_mutex );
+
   m_message_level = that.get();
   
   if (m_message_level <= m_log_level)
-    *this << that.get_string();
+    print( that.get_string() );
   
   return *this;
 } // log_system::operator<<() [log_level]
@@ -168,6 +185,20 @@ claw::log_system::operator<<( log_system& (*pf)(log_system&) )
 {
   return pf(*this);
 } // log_system::operator<<() [log_system& (*pf)(log_system&)]
+
+/*---------------------------------------------------------------------------*/
+/**
+ * \brief Writes a string in the underlying streams. The function does not check
+ * the mutex. It is the responsability of the caller to lock it.
+ * \param s The string to write.
+ */
+void claw::log_system::print( const std::string& s )
+{
+  typename stream_list_type::iterator it;
+
+  for (it = m_stream.begin(); it!=m_stream.end(); ++it)
+    (*it)->write( s );
+} // log_system::print()
 
 /*----------------------------------------------------------------------------*/
 /**
