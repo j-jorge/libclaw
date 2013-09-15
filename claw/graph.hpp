@@ -31,6 +31,7 @@
 #define __CLAW_GRAPH_HPP__
 
 #include <claw/meta/no_type.hpp>
+#include <claw/exception.hpp>
 
 #include <map>
 #include <vector>
@@ -48,21 +49,7 @@ namespace claw
    * \brief The exceptions thrown by the graphs.
    * \author Julien Jorge
    */
-  class graph_exception:
-    public std::exception
-  {
-  public:
-    graph_exception() throw();
-    graph_exception( const std::string& s) throw();
-    virtual ~graph_exception() throw();
-
-    virtual const char* what() const throw();
-
-  private:
-    /** \brief A short explanation of the problem. */
-    const std::string m_msg;
-
-  }; // graph_exception
+  typedef claw::exception graph_exception;
 
   /**
    * \brief A class to represent a graph.

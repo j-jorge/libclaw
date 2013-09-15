@@ -34,48 +34,6 @@
 
 /*---------------------------------------------------------------------------*/
 /**
- * \brief Default constructor.
- */
-claw::graph_exception::graph_exception() throw()
-  : m_msg("No message") 
-{
-
-} // graph_exception()
-
-/*---------------------------------------------------------------------------*/
-/**
- * \brief Constructor.
- * \param s An explanation of the problem.
- */
-claw::graph_exception::graph_exception( const std::string& s) throw()
-  : m_msg(s) 
-{
-
-} // graph_exception()
-
-/*---------------------------------------------------------------------------*/
-/**
- * \brief Destructor.
- */
-claw::graph_exception::~graph_exception() throw()
-{
-
-} // ~graph_exception()
-
-/*---------------------------------------------------------------------------*/
-/**
- * \brief Get an explanation of the problem.
- */
-const char* claw::graph_exception::what() const throw()
-{
-  return m_msg.c_str(); 
-} // what()
-
-
-
-
-/*---------------------------------------------------------------------------*/
-/**
  * \brief Constructor of the graph_vertex_iterator class.
  */
 template <class S, class A, class Comp>
