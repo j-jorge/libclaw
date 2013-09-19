@@ -129,6 +129,7 @@ Section "CMake modules"
   SetOutPath "$INSTDIR\lib\cmake\libclaw"
   
   File "cmake-module\libclaw-config.cmake"
+  File "cmake-module\libclaw-config-version.cmake"
 
 SectionEnd ; end of "CMake modules"
 
