@@ -115,6 +115,7 @@ target_link_libraries( claw_dynamic_library ${CMAKE_DL_LIBS} )
 
 # log system
 set( CLAW_LOGGER_SOURCES
+  ${CLAW_CODE_DIR}android_logger.cpp
   ${CLAW_CODE_DIR}logger.cpp
   ${CLAW_CODE_DIR}log_stream.cpp
   ${CLAW_CODE_DIR}log_stream_concise.cpp

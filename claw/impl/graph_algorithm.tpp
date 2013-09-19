@@ -182,7 +182,6 @@ void claw::topological_sort<Graph>::init( const Graph& g )
   m_next_index = (int)g.vertices_count()-1;
 } // topological_sort::init()
 
-#include <iostream>
 /*---------------------------------------------------------------------------*/
 template<class Graph>
 void claw::topological_sort<Graph>::end_vertex( const vertex_type& s )
