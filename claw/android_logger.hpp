@@ -46,10 +46,15 @@ namespace claw
       public claw::pattern::non_copyable
   {
   public:
+    explicit android_logger( const std::string& prefix );
+
     virtual void write( const std::string& str );
     virtual void flush();
 
   private:
+    /** \brief The prefix of the lines sent to the logger. */
+    const std::string m_prefix;
+
     /** \brief The strings writen in the log and not yet followed by a new
         line. */
     std::string m_output;

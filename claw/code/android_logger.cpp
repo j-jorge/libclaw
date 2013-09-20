@@ -35,6 +35,17 @@
 
 /*----------------------------------------------------------------------------*/
 /**
+ * \brief Constructs a new logger to write in Android logs with a given prefix.
+ * \param prefix The prefix of the lines sent to the logger.
+ */
+claw::android_logger::android_logger( const std::string& prefix )
+  : m_prefix( prefix )
+{
+
+} // android_logger::android_logger()
+
+/*----------------------------------------------------------------------------*/
+/**
  * \brief Prints something in the log.
  */
 void claw::android_logger::write( const std::string& str )
@@ -48,7 +59,8 @@ void claw::android_logger::write( const std::string& str )
       std::string log_string( m_output.substr( 0, pos ) );
       m_output = m_output.substr( pos + 1 );
 
-      __android_log_print( ANDROID_LOG_INFO, "ASGP", "%s", log_string.c_str() );
+      __android_log_print
+        ( ANDROID_LOG_INFO, m_prefix.c_str(), "%s", log_string.c_str() );
     }
 } // android_logger::write()
 
@@ -58,7 +70,8 @@ void claw::android_logger::write( const std::string& str )
  */
 void claw::android_logger::flush()
 {
-  __android_log_print( ANDROID_LOG_INFO, "ASGP", "%s", m_output.c_str() );
+  __android_log_print
+    ( ANDROID_LOG_INFO, m_prefix.c_str(), "%s", m_output.c_str() );
   m_output.clear();
 } // android_logger::write()
 
