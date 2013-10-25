@@ -76,7 +76,7 @@ set( CLAW_APPLICATION_SOURCES
   ${CLAW_CODE_DIR}arguments_table.cpp
 )
 add_library( claw_application SHARED ${CLAW_APPLICATION_SOURCES} )
-add_library( claw_application-static ${CLAW_APPLICATION_SOURCES} )
+add_library( claw_application-static STATIC ${CLAW_APPLICATION_SOURCES} )
 target_link_libraries( claw_application claw_logger )
 
 if( NOT WIN32 )
@@ -98,7 +98,7 @@ set( CLAW_CONFIGURATION_FILE_SOURCES
 )
 add_library( claw_configuration_file SHARED ${CLAW_CONFIGURATION_FILE_SOURCES} )
 add_library(
-  claw_configuration_file-static
+  claw_configuration_file-static STATIC
   STATIC ${CLAW_CONFIGURATION_FILE_SOURCES}
 )
 
@@ -108,7 +108,7 @@ set( CLAW_DYNAMIC_LIBRARY_SOURCES
 )
 add_library( claw_dynamic_library SHARED ${CLAW_DYNAMIC_LIBRARY_SOURCES} )
 add_library(
-  claw_dynamic_library-static
+  claw_dynamic_library-static STATIC
   STATIC ${CLAW_DYNAMIC_LIBRARY_SOURCES}
 )
 target_link_libraries( claw_dynamic_library ${CMAKE_DL_LIBS} )
