@@ -243,7 +243,8 @@ double claw::tween::single_tweener::do_update( double dt )
 
   const double val( get_value() );
 
-  m_callback(val);
+  if ( !m_callback.empty() )
+    m_callback(val);
 
   return result;
 } // single_tweener::do_update()
