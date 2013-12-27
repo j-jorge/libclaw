@@ -126,15 +126,29 @@ ELSE( CLAW_INCLUDE_DIRECTORY AND CLAW_LINK_DIRECTORY AND CLAW_DEFINITIONS )
 ENDIF( CLAW_INCLUDE_DIRECTORY AND CLAW_LINK_DIRECTORY AND CLAW_DEFINITIONS )
 
 #-------------------------------------------------------------------------------
+# Boost is required to build libclaw
+FIND_PACKAGE( Boost 1.42 REQUIRED COMPONENTS system )
+
+IF( NOT Boost_FOUND )
+  MESSAGE( FATAL_ERROR "Boost.system (>=1.42) is required to use libclaw." )
+  SET( CLAW_FOUND 0 )
+ENDIF( NOT Boost_FOUND )
+
+#-------------------------------------------------------------------------------
 # claw_logger
 FIND_LIBRARY(
-  CLAW_LOGGER_LIBRARIES
+  CLAW_LOGGER_LIB
   NAMES claw_logger
   PATHS ${CLAW_LINK_DIRECTORY} )
 
 IF( NOT CLAW_LOGGER_LIBRARIES )
   MESSAGE( FATAL_ERROR "Could not find claw_logger library" )
   SET(CLAW_FOUND 0)
+ELSE( NOT CLAW_LOGGER_LIBRARIES )
+  SET(
+    CLAW_LOGGER_LIBRARIES
+    ${CLAW_LOGGER_LIB}
+    ${Boost_SYSTEM_LIBRARY} )
 ENDIF( NOT CLAW_LOGGER_LIBRARIES )
 
 #-------------------------------------------------------------------------------
@@ -299,16 +313,6 @@ IF( NOT CLAW_TWEEN_LIB )
 ELSE( NOT CLAW_TWEEN_LIB )
 
   SET( CLAW_TWEEN_LIBRARIES ${CLAW_TWEEN_LIB} )
-
-  INCLUDE(FindBoost)
-
-  FIND_PACKAGE( Boost 1.42 )
-
-  IF( NOT Boost_FOUND )
-    MESSAGE( FATAL_ERROR "Can't find Boost library on version greater or equal to 1.42 on your system." )
-    SET( CLAW_FOUND 0 )
-  ENDIF( NOT Boost_FOUND )
-
 ENDIF( NOT CLAW_TWEEN_LIB )
 
 #-------------------------------------------------------------------------------
