@@ -141,15 +141,15 @@ FIND_LIBRARY(
   NAMES claw_logger
   PATHS ${CLAW_LINK_DIRECTORY} )
 
-IF( NOT CLAW_LOGGER_LIBRARIES )
+IF( NOT CLAW_LOGGER_LIB )
   MESSAGE( FATAL_ERROR "Could not find claw_logger library" )
   SET(CLAW_FOUND 0)
-ELSE( NOT CLAW_LOGGER_LIBRARIES )
+ELSE( NOT CLAW_LOGGER_LIB )
   SET(
     CLAW_LOGGER_LIBRARIES
     ${CLAW_LOGGER_LIB}
     ${Boost_SYSTEM_LIBRARY} )
-ENDIF( NOT CLAW_LOGGER_LIBRARIES )
+ENDIF( NOT CLAW_LOGGER_LIB )
 
 #-------------------------------------------------------------------------------
 # claw_application
