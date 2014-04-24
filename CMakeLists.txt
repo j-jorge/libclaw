@@ -141,8 +141,16 @@ add_library( claw_logger SHARED ${CLAW_LOGGER_SOURCES} )
 add_library( claw_logger-static STATIC ${CLAW_LOGGER_SOURCES} )
 
 target_link_libraries(
-  claw_logger intl ${Boost_THREAD_LIBRARY} ${Boost_SYSTEM_LIBRARY}
+  claw_logger ${Boost_THREAD_LIBRARY} ${Boost_SYSTEM_LIBRARY}
   )
+
+find_library( INTL_LIBRARY intl )
+
+if ( INTL_LIBRARY )
+  target_link_libraries(
+    claw_logger ${INTL_LIBRARY}
+    )
+endif( INTL_LIBRARY )
 
 if( WIN32 )
   set_target_properties( claw_logger-static
