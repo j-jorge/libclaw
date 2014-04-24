@@ -140,7 +140,7 @@ template<typename U>
 claw::math::rectangle<U> claw::math::rectangle<T>::cast_value_type_to() const
 {
   return claw::math::rectangle<U>
-    ( position.cast_value_type_to<U>(), (U)width, (U)height );
+    ( position.template cast_value_type_to<U>(), (U)width, (U)height );
 } // rectangle::cast_value_type_to()
 
 /*----------------------------------------------------------------------------*/

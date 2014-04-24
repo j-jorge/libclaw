@@ -194,7 +194,7 @@ claw::log_system::operator<<( log_system& (*pf)(log_system&) )
  */
 void claw::log_system::print( const std::string& s )
 {
-  typename stream_list_type::iterator it;
+  stream_list_type::iterator it;
 
   for (it = m_stream.begin(); it!=m_stream.end(); ++it)
     (*it)->write( s );

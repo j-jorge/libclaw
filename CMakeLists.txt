@@ -64,6 +64,21 @@ else( CLAW_NO_PNG )
   include_directories(${PNG_INCLUDE_DIR})
 endif( CLAW_NO_PNG )
 
+# look for boost
+include(FindBoost)
+
+find_package( Boost 1.42 REQUIRED COMPONENTS thread system )
+
+if( NOT Boost_FOUND )
+  message( FATAL_ERROR "Can't find Boost library on version greater or equal to 1.42 on your system." )
+endif( NOT Boost_FOUND )
+
+#-------------------------------------------------------------------------------
+# Include directories for Boost
+include_directories(
+  ${Boost_INCLUDE_DIR}
+  )
+
 #-------------------------------------------------------------------------------
 # set compilation defines
 add_definitions( ${CLAW_DEFINITIONS} )
@@ -125,8 +140,11 @@ set( CLAW_LOGGER_SOURCES
 add_library( claw_logger SHARED ${CLAW_LOGGER_SOURCES} )
 add_library( claw_logger-static STATIC ${CLAW_LOGGER_SOURCES} )
 
+target_link_libraries(
+  claw_logger intl ${Boost_THREAD_LIBRARY} ${Boost_SYSTEM_LIBRARY}
+  )
+
 if( WIN32 )
-  target_link_libraries( claw_logger intl )
   set_target_properties( claw_logger-static
     PROPERTIES COMPILE_FLAGS
     "-DCLAW_LOGGER_NO_EXPORT" )
@@ -216,19 +234,6 @@ set( CLAW_TWEEN_SOURCES
   ${CLAW_CODE_DIR}tween/easing/easing_bounce.cpp
   ${CLAW_CODE_DIR}tween/easing/easing_expo.cpp
 )
-include(FindBoost)
-
-find_package( Boost 1.42 )
-
-if( NOT Boost_FOUND )
-  message( FATAL_ERROR "Can't find Boost library on version greater or equal to 1.42 on your system." )
-endif( NOT Boost_FOUND )
-
-#-------------------------------------------------------------------------------
-# Include directories for Boost
-include_directories(
-  ${Boost_INCLUDE_DIR}
-  )
 
 add_library( claw_tween SHARED ${CLAW_TWEEN_SOURCES} )
 add_library(
@@ -236,10 +241,12 @@ add_library(
   STATIC ${CLAW_TWEEN_SOURCES}
 )
 
-# extra flags for the link
-set_target_properties(
- ${CLAW_LIBRARIES}
- PROPERTIES LINK_FLAGS "-s -Wl,--as-needed" )
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  # extra flags for the link
+  set_target_properties(
+     ${CLAW_LIBRARIES}
+     PROPERTIES LINK_FLAGS "-s -Wl,--as-needed" )
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 # all libraries
 set( CLAW_ALL_LIBRARIES ${CLAW_LIBRARIES} ${CLAW_GRAPHIC_LIBRARIES})
