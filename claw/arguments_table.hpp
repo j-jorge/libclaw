@@ -63,7 +63,8 @@ namespace claw
       bool operator<( const argument_attributes& that ) const;
 
       std::string format_short_help() const;
-      std::string format_long_help() const;
+      std::string format_long_help( std::size_t arguments_width ) const;
+      std::string format_long_help_arguments() const;
 
       const std::string& get_name() const;
       const std::string& get_second_name() const;
@@ -128,6 +129,8 @@ namespace claw
     void get_argument_names( const std::string& arg_name,
                              std::string& short_name,
                              std::string& long_name ) const;
+
+    std::size_t get_maximum_long_help_arguments_width() const;
 
   private:
     /** \brief The class that will store arguments values. */

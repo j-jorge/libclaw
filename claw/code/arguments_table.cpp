@@ -28,7 +28,9 @@
  * \author Julien Jorge
  */
 #include <claw/arguments_table.hpp>
+
 #include <claw/assert.hpp>
+#include <iomanip>
 #include <iostream>
 
 /*----------------------------------------------------------------------------*/
@@ -82,16 +84,35 @@ claw::arguments_table::argument_attributes::format_short_help() const
 /*----------------------------------------------------------------------------*/
 /**
  * \brief Get a long description of the argument.
+ * \param arguments_width The width in chararcters occupied by the arguments on
+ *        the formatted line.
  */
-std::string claw::arguments_table::argument_attributes::format_long_help() const
+std::string claw::arguments_table::argument_attributes::format_long_help
+( std::size_t arguments_width ) const
+{
+  std::ostringstream result;
+
+  result << std::left << std::setw( arguments_width )
+         << format_long_help_arguments() << ' ' << m_help_message;
+
+  return result.str();
+} // arguments_table::argument_attributes::format_long_help()
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Returns a string containing the arguments formatted in the same way
+ *        than they are in format_long_help.
+ */
+std::string
+claw::arguments_table::argument_attributes::format_long_help_arguments() const
 {
   std::string result(m_name);
 
   if ( !m_second_name.empty() )
     result += ", " + m_second_name;
 
-  return result + "\t" + m_help_message;
-} // arguments_table::argument_attributes::format_long_help()
+  return result;
+} // arguments_table::argument_attributes::
 
 /*----------------------------------------------------------------------------*/
 /**
@@ -269,12 +290,15 @@ void claw::arguments_table::help( const std::string& free_args ) const
 
   std::cout << "\n\n";
 
+  const std::size_t description_column
+    ( get_maximum_long_help_arguments_width() );
+
   for (it=m_short_arguments.begin(); it!=m_short_arguments.end(); ++it)
-    std::cout << "\t" << it->format_long_help() << std::endl;
+    std::cout << "\t" << it->format_long_help( description_column ) << '\n';
 
   for (it=m_long_arguments.begin(); it!=m_long_arguments.end(); ++it)
     if (it->get_second_name().empty())
-      std::cout << "\t" << it->format_long_help() << std::endl;
+      std::cout << "\t" << it->format_long_help( description_column ) << '\n';
 } // arguments_table::help()
 
 /*----------------------------------------------------------------------------*/
@@ -586,3 +610,23 @@ void claw::arguments_table::get_argument_names
         }
     }
 } // arguments_table::get_argument_names()
+
+/*----------------------------------------------------------------------------*/
+/**
+ * \brief Returns the length of the longest formatted argument names in the long
+ *        help display.
+ */
+std::size_t claw::arguments_table::get_maximum_long_help_arguments_width() const
+{
+  math::ordered_set<argument_attributes>::const_iterator it;
+  std::size_t result(0);
+
+  for (it=m_short_arguments.begin(); it!=m_short_arguments.end(); ++it)
+    result = std::max( result, it->format_long_help_arguments().size() );
+
+  for (it=m_long_arguments.begin(); it!=m_long_arguments.end(); ++it)
+    if (it->get_second_name().empty())
+      result = std::max( result, it->format_long_help_arguments().size() );
+
+  return result;
+} // arguments_table::get_maximum_long_help_arguments_width()
