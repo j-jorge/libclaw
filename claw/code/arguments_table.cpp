@@ -294,11 +294,11 @@ void claw::arguments_table::help( const std::string& free_args ) const
     ( get_maximum_long_help_arguments_width() );
 
   for (it=m_short_arguments.begin(); it!=m_short_arguments.end(); ++it)
-    std::cout << "\t" << it->format_long_help( description_column ) << '\n';
+    std::cout << "  " << it->format_long_help( description_column ) << '\n';
 
   for (it=m_long_arguments.begin(); it!=m_long_arguments.end(); ++it)
     if (it->get_second_name().empty())
-      std::cout << "\t" << it->format_long_help( description_column ) << '\n';
+      std::cout << "  " << it->format_long_help( description_column ) << '\n';
 } // arguments_table::help()
 
 /*----------------------------------------------------------------------------*/
