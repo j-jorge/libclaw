@@ -70,8 +70,12 @@ void claw::android_logger::write( const std::string& str )
  */
 void claw::android_logger::flush()
 {
+  if ( m_output.empty() )
+    return;
+  
   __android_log_print
     ( ANDROID_LOG_INFO, m_prefix.c_str(), "%s", m_output.c_str() );
+  
   m_output.clear();
 } // android_logger::write()
 
