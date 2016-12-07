@@ -32,27 +32,14 @@
 #include <boost/bind.hpp>
 
 /**
- * \brief Swap the values of two double variables.
- * \param a The reference to the first value to swap.
- * \param b The reference to the second value to swap.
- *
- * On some configurations the compiler complains about not finding
- * std::swap<double> in instructions like:
- *
- * \code boost::bind( &std::swap<double>, boost::ref(val), _1 ); \endcode
- *
- * As it was used in
- *   claw::tween::single_tweener::single_tweener
- *     (double&, double, double, easing_function)
- *
- * The workaround is to use this local definition of the swap function.
+ * \brief Assign a value to a variable.
+ * \param a The variable to which b is assigned.
+ * \param b The value to assign to a.
  */
-static void local_swap( double& a, double& b )
+static void assign( double& a, double b )
 {
-  const double t(a);
   a = b;
-  b = t;
-} // local_swap()
+}
 
 #ifndef CLAW_TWEENER_DEFINE_BOOST_THROW_EXCEPTION
 
@@ -122,7 +109,7 @@ claw::tween::single_tweener::single_tweener
 ( double& val, double end, double duration, easing_function e )
   : m_init(val), m_end(end), m_date(0), m_duration(duration), m_easing(e)
 {
-  m_callback = boost::bind( &local_swap, boost::ref(val), _1 );
+  m_callback = boost::bind( &assign, boost::ref(val), _1 );
 } // single_tweener::single_tweener()
 
 /*----------------------------------------------------------------------------*/
