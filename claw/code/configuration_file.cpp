@@ -441,7 +441,7 @@ claw::configuration_file::file_end() const
 bool claw::configuration_file::get_line
 ( std::istream& is, const syntax_description& syntax, std::string& line ) const
 {
-  bool result = text::getline(is, line);
+  const bool result( text::getline(is, line) );
 
   if ( result )
     {
