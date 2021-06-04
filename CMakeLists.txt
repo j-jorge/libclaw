@@ -83,6 +83,8 @@ include_directories(
 # set compilation defines
 add_definitions( ${CLAW_DEFINITIONS} )
 
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++03")
+
 #-------------------------------------------------------------------------------
 # application
 set( CLAW_APPLICATION_SOURCES
