@@ -26,8 +26,9 @@
  * \brief Implementation of claw::math::curve.
  * \author Julien Jorge
  */
-#include <boost/math/special_functions/cbrt.hpp>
-#include <boost/math/constants/constants.hpp>
+
+#include <cmath>
+#include <limits>
 
 /*----------------------------------------------------------------------------*/
 /**
@@ -516,10 +517,12 @@ claw::math::curve<C, Traits>::section::get_roots_degree_3
   else if ( delta > 0 )
     {
     result.push_back
-      ( boost::math::cbrt
-        ( (-q + std::sqrt(delta)) / 2.0 )
-        + boost::math::cbrt
-        ( (-q - std::sqrt(delta)) / 2.0 ) - b / (3.0 * a));
+      ( std::pow(
+        ( (-q + std::sqrt(delta)) / 2.0 ),
+        1.L/3.L)
+        + std::pow(
+        ( (-q - std::sqrt(delta)) / 2.0 ) - b / (3.0 * a),
+        1.L/3.L));
     }
   else
     for ( std::size_t i=0; i!=3; ++i )
@@ -527,7 +530,7 @@ claw::math::curve<C, Traits>::section::get_roots_degree_3
         ( 2.0 * std::sqrt( -p / 3.0 )
           * std::cos
           ( std::acos( std::sqrt(27.0 / (- p * p * p)) * - q / 2.0 ) / 3.0
-            + 2.0 * i * boost::math::constants::pi<double>() / 3.0 ) 
+            + 2.0 * i * 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899L / 3.0 ) 
           - b / (3.0 * a));
 
   return result;
