@@ -1,3 +1,13 @@
+2022-04-24 Julien Jorge <julien.jorge@stuff-o-matic.org>
+
+	* version 1.8.0
+
+	* claw
+	- Refresh the source tree.
+	- Update the CMake scripts with a more recent CMake version.
+	- Switch to C++11 and remove dependency to Boost.
+	- Drop some unused Windows-specific installation files.
+
 2013-07-03 Julien Jorge <julien.jorge@gamned.org>
 
 	* version 1.7.4
@@ -198,7 +208,7 @@
 	  - The assertion macros call abort() instead of exit()
 	  - Split the implementation and the interface of the AVL
 	  - Added a private operator=() to the class non_copyable
-	
+
 
 2008-01-12 Julien Jorge <julien_jorge@yahoo.fr>
 
@@ -240,7 +250,7 @@
 	    general. IT BREAKS THE COMPATIBILITY WITH PREVIOUS VERSIONS:
 	    The difference concerns mainly the right() and bottom()
 	    methods of the rectangle<T> class:
-	    
+
 	    (new) rectangle<T>::right() == (old) rectangle<T>::right() + 1
 
 	* claw::lzw_encoder, claw::lzw_decoder: Added those classes to
@@ -298,7 +308,7 @@
 	  - updated the code so it works under Windows (tested with
 	    Windows XP and MinGW).
 	  - simplified the use of Claw with CMake.
-	
+
 	* claw::kmp: bug fix. #1632755
 
 	* claw::logger: added __declspec(dll{import,export}) decorations
@@ -339,7 +349,7 @@
 2006-10-22 Julien Jorge <julien_jorge@yahoo.fr>
 
 	* claw::configuration_file: created the class.
-	
+
 	* claw::arguments_table: bug fix. The parameters of the long argument
 	  were not saved when calling the add() method.
 
@@ -349,14 +359,14 @@
 	  - Added a method to check if required arguments are set.
 	  - Modified the help() method to print the required fields before
 	    optional ones.
-	  
+
 2006-10-16 Julien Jorge <julien_jorge@yahoo.fr>
 
         * version 1.3.1b
 
 	* claw::net: Bug fix. Fixed bug #1578027. Sockets worked only on local
 	  host.
-	  
+
 2006-10-14 Julien Jorge <julien_jorge@yahoo.fr>
 
 	* version 1.3.0b
@@ -372,7 +382,7 @@
 	    one function call.
 	  - Small bug fix in claw::math::rectangle constructor with two
 	    claw::math::coordinate_2d.
-	
+
 	* claw::math::box_2d: Added a constructor from two
 	  math::coordinate_2d<> for the position and the size.
 
@@ -380,20 +390,20 @@
 
 	* claw::math::vector_2d: Added a constructor with two coordinates
 	  (the head and the tail).
-	
+
 	* claw::math:point_2d: deprecated. Moved its "distance()" method
 	  in the math::coordinate_2d class.
-	
+
 	* claw::logger: bug fix. Buffer overflow risk in the write method.
-	
+
 	* claw::graphic::png: new class. Support of the PNG image format
 	  (read/write).
 
 	* claw::graphic::jpeg: Added writing support for JPEG images.
-	
+
 	* claw::graphic::image: Added a load( std::istream& ) method to
 	  load any type of supported format.
-	
+
 	* claw::graphic::targa: bug fix. The signature was incorrect
 	  (checking and writing). WARNING: All targa file wrote with
 	  previous versions aren't valid.
@@ -408,7 +418,7 @@
 2006-07-18 Julien Jorge <julien_jorge@yahoo.fr>
 
 	* version 1.2.1b
-	
+
 	* claw::graphic::targa: Bug fix. An invalid code was output when
 	  calling ::file_output_buffer::raw() and the /remaining/ variable
 	  was zero.
@@ -416,36 +426,36 @@
 2006-07-10 Julien Jorge <julien_jorge@yahoo.fr>
 
 	* version 1.2.0b
-	
+
 	* claw::unary_compose: new class. Function object that composes
 	  two function objects.
-	
+
 	* claw::delete_function: new class. Function object that deletes a
 	  pointer.
-	
+
 	* claw::pair_first, claw::pair_second: new classes. Equivalent to
 	  the *first* and *second* classes, but take std::pair as template
 	  arguments.
-	
+
 	* claw::clone: new class. Function object that clones a pointer.
-	
+
 	* claw::arguments_table: new class. A class to manage the
 	  arguments of your program, with automatic management of
 	  short/long arguments and help message.
-	
+
 	* claw::socket_traits: new class. Common interface for platform
 	  specific methods needed for using sockets. Now we can use
           sockets under linux or windows.
-	
+
 	* claw::rle_encoder, claw::rle_decoder: new classes. Classes to
 	  help encoding/decoding RLE streams.
-	
+
 	* claw::graphic::color_palette: new class. A class that manage the
 	  color palette in palettized images.
-	
+
 	* claw::istream_input_buffer: new class. This class is made to
 	  help reading istreams with a buffer.
-	
+
 	* claw::graphic::jpeg: new class. An image class for jpeg file loading.
 
 	* claw::graphic::targa:
@@ -455,30 +465,30 @@
 	    than std::ifstream).
 	  - Bug fix. When reading non-32 bits targas, the transparency was
 	    incorrect.
-	
+
 	* claw::graphic::bitmap:
 	  - Added loading support for (un)compressed monochrome, 4 bpp and
 	    8 bpp bitmaps.
 	  - Modified so it can be read from std::istream (more generic
 	    than std::ifstream).
-	
+
 	* claw::graphic::image:
 	  - Changed allocation mode. Data is allocated each line at once,
 	  - Removed the pixels methods.
 	  - Added the iterator class.
-	
+
 	* claw::application: Use the new claw::arguments_table class
 	  instead of the claw::arguments class.
-	
+
 	* claw::graph: Translated the last french method names to english
 	  names.
-	
+
 	* claw::arguments: bug fix. The program name wasn't removed from
 	  the argument list.
-	
+
 	* claw::math::line_2d<>: bug fix.  Corrected mistakes in the
 	  intersection() method.
-	
+
 	* general:
 	  - Added an example program for the claw::graphic::jpeg class.
 	  - Added the string_algorithm package,

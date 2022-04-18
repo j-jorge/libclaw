@@ -7,31 +7,31 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-13 22:27+0200\n"
+"POT-Creation-Date: 2022-04-24 16:56+0200\n"
 "PO-Revision-Date: 2010-09-13 22:28+0100\n"
-"Last-Translator: Julien Jorge <julien.jorge@gamned.org>\n"
-"Language-Team: Français <julien.jorge@gamned.org>\n"
+"Last-Translator: Julien Jorge <julien.jorge@stuff-o-matic.com>\n"
+"Language-Team: Français <julien.jorge@stuff-o-matic.com>>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../../../claw/code/log_stream_uniq.cpp:103
+#: ../../../lib/logger/src/claw/logger/log_stream_uniq.cpp:103
 msgid " time)"
 msgid_plural " times)"
 msgstr[0] " fois)"
 msgstr[1] " fois)"
 
-#: ../../../claw/code/log_stream_uniq.cpp:102
+#: ../../../lib/logger/src/claw/logger/log_stream_uniq.cpp:102
 msgid "(Previous line repeated "
 msgstr "(La ligne précédente est répétée "
 
-#: ../../../claw/code/arguments.cpp:42
+#: ../../../lib/application/src/claw/application/arguments.cpp:43
 msgid "<unknow>"
 msgstr "<inconnu>"
 
-#: ../../../claw/code/application.cpp:58
+#: ../../../lib/application/src/claw/application/application.cpp:74
 msgid ""
 "Level of log informations:\n"
 "\t\terror: error messages,\n"
@@ -43,51 +43,49 @@ msgstr ""
 "\t\tavertissement : messages d'avertissement et d'erreur ;\n"
 "\t\tverbeux : tous les messages."
 
-#: ../../../claw/code/application.cpp:54
+#: ../../../lib/application/src/claw/application/application.cpp:70
 msgid "The file to use to store log informations."
 msgstr "Le fichier dans le quel seront stockés les messages de journalisation."
 
-#: ../../../claw/code/application.cpp:70
+#: ../../../lib/application/src/claw/application/application.cpp:86
 msgid ""
 "Use a logger that does not output messages that have been recently output."
 msgstr ""
 "Utilise un système de journalisation qui omet les messages récemment "
 "affichés."
 
-#: ../../../claw/code/application.cpp:65
+#: ../../../lib/application/src/claw/application/application.cpp:81
 msgid "Use a logger that does not output successively the same message."
 msgstr ""
 "Utilise un système de journalisation qui n'affiche pas le même message "
 "plusieurs fois successivement."
 
-#: ../../../claw/code/application.cpp:97
+#: ../../../lib/application/src/claw/application/application.cpp:113
 msgid "error"
 msgstr "erreur"
 
-#: ../../../claw/code/log_level.cpp:36
-msgid "error: "
-msgstr "erreur : "
-
-#: ../../../claw/code/application.cpp:55
+#: ../../../lib/application/src/claw/application/application.cpp:71
 msgid "file"
 msgstr "fichier"
 
-#: ../../../claw/code/application.cpp:71
+#: ../../../lib/application/src/claw/application/application.cpp:87
 msgid "integer"
 msgstr "entier"
 
-#: ../../../claw/code/application.cpp:61
+#: ../../../lib/application/src/claw/application/application.cpp:77
 msgid "string"
 msgstr "chaîne de caractères"
 
-#: ../../../claw/code/application.cpp:101
+#: ../../../lib/application/src/claw/application/application.cpp:117
 msgid "verbose"
 msgstr "verbeux"
 
-#: ../../../claw/code/application.cpp:99
+#: ../../../lib/application/src/claw/application/application.cpp:115
 msgid "warning"
 msgstr "avertissement"
 
-#: ../../../claw/code/log_level.cpp:37
-msgid "warning: "
-msgstr "avertissement : "
+#~ msgid "error: "
+#~ msgstr "erreur : "
+
+#~ msgid "warning: "
+#~ msgstr "avertissement : "

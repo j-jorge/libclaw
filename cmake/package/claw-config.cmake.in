@@ -1,0 +1,6 @@
+find_package(Intl REQUIRED)
+find_package(JPEG REQUIRED)
+find_package(PNG REQUIRED)
+
+get_filename_component(_current_dir "${CMAKE_CURRENT_LIST_FILE}" PATH)
+include(${_current_dir}/claw-config-generated.cmake)
