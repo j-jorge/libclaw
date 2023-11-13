@@ -28,7 +28,7 @@ find "$install_prefix/share/doc/libclaw1/example" -name "*.tar.gz" \
             pushd "$example_name-build" >/dev/null
 
             cmake "../$example_name" -DCMAKE_PREFIX_PATH="$install_prefix"
-            if make -j $(nproc)
+            if cmake --build . --parallel $(nproc)
             then
                 pass+=("$example_name")
             else

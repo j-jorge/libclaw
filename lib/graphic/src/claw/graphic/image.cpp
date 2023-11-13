@@ -36,15 +36,11 @@
 #include <claw/graphic/targa.hpp>
 #include <claw/graphic/xbm.hpp>
 
-#ifdef CLAW_PNG_SUPPORT
 /* The png.h file must be included before any other file that includes setjmp.h
    (as jpeg.hpp). */
-#include <claw/png.hpp>
-#endif // CLAW_PNG_SUPPORT
+#include <claw/graphic/png.hpp>
 
-#ifdef CLAW_JPEG_SUPPORT
-#include <claw/jpeg.hpp>
-#endif // CLAW_JPEG_SUPPORT
+#include <claw/graphic/jpeg.hpp>
 
 #include <algorithm>
 
@@ -355,7 +351,6 @@ void claw::graphic::image::load(std::istream& f)
 {
   bool ok = false;
 
-#ifdef CLAW_JPEG_SUPPORT
   if(!ok)
     try
       {
@@ -364,9 +359,7 @@ void claw::graphic::image::load(std::istream& f)
       }
     catch(...)
       {}
-#endif // CLAW_JPEG_SUPPORT
 
-#ifdef CLAW_PNG_SUPPORT
   if(!ok)
     try
       {
@@ -375,7 +368,6 @@ void claw::graphic::image::load(std::istream& f)
       }
     catch(...)
       {}
-#endif // CLAW_PNG_SUPPORT
 
   if(!ok)
     try
