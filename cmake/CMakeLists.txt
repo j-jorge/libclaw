@@ -69,7 +69,23 @@ function(claw_library)
 endfunction()
 
 add_subdirectory(lib)
-add_subdirectory(desktop/locale)
-add_subdirectory(doc)
-add_subdirectory(example)
+
+option(CLAW_BUILD_LOCALIZATION "Generate localized files." ON)
+
+if (CLAW_BUILD_LOCALIZATION)
+  add_subdirectory(desktop/locale)
+endif()
+
+option(CLAW_BUILD_DOCUMENTATION "Generate the documentation." ON)
+
+if (CLAW_BUILD_DOCUMENTATION)
+  add_subdirectory(doc)
+endif()
+
+option(CLAW_BUILD_EXAMPLES "Build the example programs." ON)
+
+if (CLAW_BUILD_EXAMPLES)
+  add_subdirectory(example)
+endif()
+
 add_subdirectory(package)
