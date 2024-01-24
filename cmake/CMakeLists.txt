@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(claw VERSION 1.8.0)
+project(claw VERSION 1.8.2)
 
 include(GNUInstallDirs)
 
