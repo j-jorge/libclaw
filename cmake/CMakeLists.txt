@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.14)
 
 project(claw VERSION 1.8.2)
 
+set(CMAKE_CXX_STANDARD 11)
+
 include(GNUInstallDirs)
 
 set(repository_root "${CMAKE_CURRENT_LIST_DIR}/..")
