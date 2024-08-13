@@ -105,7 +105,6 @@ namespace claw
        */
       template <typename Image, typename Pixel>
       class base_iterator
-        : public std::iterator<std::random_access_iterator_tag, Pixel>
       {
       private:
         /** \brief The type of the image we are iterating through. */

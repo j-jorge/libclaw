@@ -30,7 +30,6 @@
 #ifndef __CLAW_FUNCTIONAL_HPP__
 #define __CLAW_FUNCTIONAL_HPP__
 
-#include <functional>
 #include <utility>
 
 namespace claw
@@ -40,8 +39,12 @@ namespace claw
    * \author Julien Jorge
    */
   template <class T1, class T2>
-  class first : public std::unary_function<std::pair<T1, T2>, T1&>
+  class first
   {
+  public:
+    using argument_type = std::pair<T1, T2>&;
+    using result_type = T1&;
+
   public:
     T1& operator()(std::pair<T1, T2>& p) const
     {
@@ -55,8 +58,11 @@ namespace claw
    */
   template <class T1, class T2>
   class const_first
-    : public std::unary_function<const std::pair<T1, T2>, const T1&>
   {
+  public:
+    using argument_type = const std::pair<T1, T2>&;
+    using result_type = const T1&;
+
   public:
     const T1& operator()(const std::pair<T1, T2>& p) const
     {
@@ -96,8 +102,12 @@ namespace claw
    * \author Julien Jorge
    */
   template <class T1, class T2>
-  class second : public std::unary_function<std::pair<T1, T2>, T2&>
+  class second
   {
+  public:
+    using argument_type = std::pair<T1, T2>&;
+    using result_type = T2&;
+
   public:
     T2& operator()(std::pair<T1, T2>& p) const
     {
@@ -111,8 +121,11 @@ namespace claw
    */
   template <class T1, class T2>
   class const_second
-    : public std::unary_function<const std::pair<T1, T2>, const T2&>
   {
+  public:
+    using argument_type = const std::pair<T1, T2>&;
+    using result_type = const T2&;
+
   public:
     const T2& operator()(const std::pair<T1, T2>& p) const
     {
@@ -166,8 +179,12 @@ namespace claw
    * \author Julien Jorge
    */
   template <class T>
-  class unary_true : public std::unary_function<T, bool>
+  class unary_true
   {
+  public:
+    using argument_type = const T&;
+    using result_type = bool;
+
   public:
     bool operator()(const T& t) const
     {
@@ -187,8 +204,13 @@ namespace claw
    * \author Julien Jorge
    */
   template <class T, class U>
-  class binary_true : public std::binary_function<T, U, bool>
+  class binary_true
   {
+  public:
+    using first_argument_type = const T&;
+    using second_argument_type = const U&;
+    using result_type = bool;
+
   public:
     bool operator()(const T& t, const U& u) const
     {
@@ -209,9 +231,11 @@ namespace claw
    */
   template <typename F1, typename F2>
   class unary_compose
-    : public std::unary_function<typename F2::argument_type,
-                                 typename F1::result_type>
   {
+  public:
+    using argument_type = typename F2::argument_type;
+    using result_type = typename F1::result_type;
+
   public:
     unary_compose()
     {}
@@ -246,8 +270,12 @@ namespace claw
    * \author Julien Jorge
    */
   template <typename T>
-  class delete_function : public std::unary_function<T, void>
+  class delete_function
   {
+  public:
+    using argument_type = const T&;
+    using result_type = void;
+
   public:
     void operator()(const T& a) const
     {
@@ -265,8 +293,12 @@ namespace claw
    * \author Julien Jorge
    */
   template <typename T>
-  class clone : public std::unary_function<T*, T*>
+  class clone
   {
+  public:
+    using argument_type = const T*;
+    using result_type = T*;
+
   public:
     T* operator()(const T* a) const
     {
@@ -283,8 +315,12 @@ namespace claw
    * \author Julien Jorge
    */
   template <typename T>
-  class dereference : public std::unary_function<T*, T&>
+  class dereference
   {
+  public:
+    using argument_type = T*;
+    using result_type = T&;
+
   public:
     T& operator()(T* a) const
     {
@@ -302,8 +338,12 @@ namespace claw
    * \author Julien Jorge
    */
   template <typename T>
-  class const_dereference : public std::unary_function<const T*, const T&>
+  class const_dereference
   {
+  public:
+    using argument_type = const T*;
+    using result_type = const T&;
+
   public:
     const_dereference()
     {}

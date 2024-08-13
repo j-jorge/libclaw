@@ -62,8 +62,6 @@ namespace claw
     }; // non_copyable
   }
 
-  namespace concept = pattern;
-
 }
 
 #endif // __CLAW_NON_COPYABLE_HPP__
