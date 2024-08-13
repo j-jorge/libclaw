@@ -27,6 +27,7 @@
  * \brief The avl class implementation.
  * \author Julien Jorge
  */
+#include <algorithm>
 #include <cassert>
 
 /**
