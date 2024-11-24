@@ -209,7 +209,7 @@ namespace claw
     it_index<T> operator++(int)
     {
       it_index<T> r(*this);
-      ++(this);
+      ++(*this);
       return r;
     }
 
@@ -225,7 +225,7 @@ namespace claw
     it_index<T> operator--(int)
     {
       it_index<T> r(*this);
-      --(this);
+      --(*this);
       return r;
     }
 
