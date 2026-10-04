@@ -40,4 +40,5 @@ claw_create_translations(
   TARGET claw-translations
   TEMPLATE "${locale_root}/libclaw.pot"
   FILES "${locale_root}/fr.po"
+  FILES "${locale_root}/ka.po"
   )

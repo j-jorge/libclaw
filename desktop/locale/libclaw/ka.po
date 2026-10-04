@@ -1,0 +1,81 @@
+# Georgian translation for libclaw.
+# Copyright (C) 2026 libclaw's authors.
+# This file is distributed under the same license as the libclaw package.
+# Ekaterine Papava <papava.e@gtu.ge>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: libclaw\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-24 16:56+0200\n"
+"PO-Revision-Date: 2026-10-03 05:18+0200\n"
+"Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
+"Language-Team: Georgian <(nothing)>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.9\n"
+
+#: ../../../lib/logger/src/claw/logger/log_stream_uniq.cpp:103
+msgid " time)"
+msgid_plural " times)"
+msgstr[0] " -ხელ)"
+msgstr[1] " -ჯერ)"
+
+#: ../../../lib/logger/src/claw/logger/log_stream_uniq.cpp:102
+msgid "(Previous line repeated "
+msgstr "(წინა ხაზი გამეორდა "
+
+#: ../../../lib/application/src/claw/application/arguments.cpp:43
+msgid "<unknow>"
+msgstr "<უცნობი>"
+
+#: ../../../lib/application/src/claw/application/application.cpp:74
+msgid ""
+"Level of log informations:\n"
+"\t\terror: error messages,\n"
+"\t\twarning: warning and error messages,\n"
+"\t\tverbose: all messages."
+msgstr ""
+"ჟურნალში ჩაწერილი ინფორმაციის დონე:\n"
+"\t\tშეცდომა: შეცდომის შეტყობინებები,\n"
+"\t\tგაფრთხილება: გაფრთხილებისა და შეცდომის შეტყობინებები,\n"
+"\t\tდამატებითი შეტყობინებები: ყველა შეტყობინება."
+
+#: ../../../lib/application/src/claw/application/application.cpp:70
+msgid "The file to use to store log informations."
+msgstr "ფაილი ჟურნალის ინფორმაციის შესანახად."
+
+#: ../../../lib/application/src/claw/application/application.cpp:86
+msgid "Use a logger that does not output messages that have been recently output."
+msgstr "ჟურნალში ჩაწერის იმ პროგრამის გამოყენება, რომელიც არ გამოიტანს ახლახან გამოტანილ შეტყობინებებს."
+
+#: ../../../lib/application/src/claw/application/application.cpp:81
+msgid "Use a logger that does not output successively the same message."
+msgstr "ჟურნალში ჩაწერის იმ პროგრამის გამოყენება, რომელიც ერთი და იგივე შეტყობინებებს არ გამოიტანს."
+
+#: ../../../lib/application/src/claw/application/application.cpp:113
+msgid "error"
+msgstr "შეცდომა"
+
+#: ../../../lib/application/src/claw/application/application.cpp:71
+msgid "file"
+msgstr "ფაილი"
+
+#: ../../../lib/application/src/claw/application/application.cpp:87
+msgid "integer"
+msgstr "მთელი რიცხვი"
+
+#: ../../../lib/application/src/claw/application/application.cpp:77
+msgid "string"
+msgstr "სტრიქონი"
+
+#: ../../../lib/application/src/claw/application/application.cpp:117
+msgid "verbose"
+msgstr "დამატებითი შეტყობინებები"
+
+#: ../../../lib/application/src/claw/application/application.cpp:115
+msgid "warning"
+msgstr "გაფრთხილება"
